@@ -1,6 +1,8 @@
 class MovableObject {
     img;
-
+    imageCache = {};
+    currentImage = 0;
+    speed;
 
     //bspw ('img/test.png')
     loadImage(path) {
@@ -8,12 +10,22 @@ class MovableObject {
         this.img.src = path;
     }
 
+    loadImages(array) { //images werden in JSON gespeichert (in bspw character script ausgeführt mit entsprechenden bildern)
+        array.forEach((path) => { //rotieren durch vorhandenen Bilder in entspr. script hinterlegt bis durch
+        let img = new Image(); 
+        img.src = path;
+        this.imageCache[path] = img;
+        });
+        
+    }
+
     moveRight(){
         console.log('Moving Right');
     }
 
-    
-    moveLeft() {
-
+    moveLeft(){
+        setInterval(() => {
+            this.positionX -= this.speed; //wie sich die x Koordinate verändern soll
+        }, 1000/60); //die millisekunden, die sich das Intervat wiederholen soll   
     }
 }
