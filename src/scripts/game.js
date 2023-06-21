@@ -35,7 +35,7 @@ window.addEventListener("keydown", (e) => { //welche Taste wird gedrückt
         keyboard.DOWN = true;
     }
     if(e.keyCode == 32) {
-        keyboard.SPACE = true;
+        keyboard.UP = true;
     }
     if(e.keyCode == 16) {
         keyboard.ACTION = true;
@@ -68,7 +68,7 @@ window.addEventListener("keyup", (e) => { //welche Taste wird losgelassen
         keyboard.DOWN = false;
     }
     if(e.keyCode == 32) {
-        keyboard.SPACE = false;
+        keyboard.UP = false;
     }
     if(e.keyCode == 16) {
         keyboard.ACTION = false;

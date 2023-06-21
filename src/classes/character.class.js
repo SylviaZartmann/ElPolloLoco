@@ -35,7 +35,7 @@ class Character extends MovableObject {
     "src/img/2_character_pepe/2_walk/W-25.png",
     "src/img/2_character_pepe/2_walk/W-26.png",
   ];
-  IMAGES_JUMING = [
+  IMAGES_JUMPING = [
     "src/img/2_character_pepe/3_jump/J-31.png",
     "src/img/2_character_pepe/3_jump/J-32.png",
     "src/img/2_character_pepe/3_jump/J-33.png",
@@ -64,52 +64,48 @@ class Character extends MovableObject {
   world; //der Charakter hat hiermit eine Variable "world", mit der wir auf die Variablen aus der Wolrd zugreifen können - auch Keyboard
   //walking_sound = new Audio('src/audio/running.mp3');
   speed = 5;
-  constructor() {
-    super().loadImage("src/img/2_character_pepe/2_walk/W-21.png");
-    this.loadImages(this.IMAGES_WALKING); //es werden alle Bilder des Charakters in Bewebung in JSON geladen
 
+  constructor() {
+    super().loadImage(this.IMAGES_IDLE[0]);
+    this.loadImages(this.IMAGES_IDLE);
+    this.loadImages(this.IMAGES_LONGIDLE);
+    this.loadImages(this.IMAGES_WALKING); //es werden alle Bilder des Charakters in Bewebung in JSON geladen
+    this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_DEAD);
+    this.applyGravity();
     this.animate();
   }
 
   animate() {
     setInterval(() => {
       //this.walking_sound.pause();
-      if (
-        this.world.keyboard.RIGHT &&
-        this.positionX < this.world.level.level_end_x
-      ) {
-        //überprüfen mit < das Spielfeldende
-        //nur wenn Right oder D gedrückt wird, wird Animation ausgeführt
-        this.positionX += this.speed;
-        this.otherDirection = false; //um das Bild des Charas zurückzuspiegeln
-        //this.walking_sound.play();
+      if (this.world.keyboard.RIGHT && this.positionX < this.world.level.level_end_x) {
+        this.moveRight(); //funktion in movable Objects gepackt, cleancode
       }
 
       if (this.world.keyboard.LEFT && this.positionX > -615) {
         //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
         //nur wenn Left oder A gedrückt wird, wird Animation ausgeführt
-        this.positionX -= this.speed;
+        this.moveLeft(); //funktion in movable Objects gepackt, cleancode
         this.otherDirection = true; //um das Bild des Charas zu spiegeln
       }
+
+      if (this.world.keyboard.UP && !this.isAboveGround()) 
+        this.jump(); //funktion in movable Objects gepackt, cleancode
+
       this.world.camera_X = -this.positionX + 100; //wir heften die Verschiebung der x koordinate an den Charakter
     }, 1000 / 60);
 
-    // Modulo = 0 % 6 = 0/6 = 0, Rest 0
-    // Modulo = 1 % 6 = 1/6 = 0, Rest 1
-    // Modulo = 5 % 6 = 5/6 = 0, Rest 5
-    // Modulo = 6 % 6 = 6/6 = 1, Rest 0
-    // Modulo = 7 % 6 = 6/6 = 1, Rest 1 -> Modulo hebt Rest auf und i hat wieder den Wert 1
-    // bedeutet i hat den Wert 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0
-
     setInterval(() => {
-      if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        //nur wenn Right gedrückt wird, wird Animation ausgeführt
-
-        //LAUFANIMATION
-        this.playAnimation(this.IMAGES_WALKING);
+      if (this.isAboveGround()) {
+        this.playAnimation(this.IMAGES_JUMPING);
+      } else {
+        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+          //nur wenn Right gedrückt wird, wird Animation ausgeführt
+          this.playAnimation(this.IMAGES_WALKING);
+        }
       }
     }, 100);
   }
-
-  jump() {}
 }

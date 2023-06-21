@@ -18,7 +18,9 @@ class Chick extends MovableObject {
   }
 
   animate() {
-    this.moveLeft();
+    setInterval(() => {
+        this.moveLeft(); //wie sich die x Koordinate verändern soll
+    }, 1000/60);
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 150);
