@@ -4,9 +4,9 @@ class Cloud extends MovableObject {
     height = 250;
     speed = 0.15;
 
-    constructor(){
-        super().loadImage('src/img/5_background/layers/4_clouds/1.png');
-        this.positionX = 120 + Math.random()*500; //ohne super, weil variable
+    constructor(imagepath){
+        super().loadImage(imagepath);
+        this.positionX = 120 + Math.random()*500; //ohne "super()", weil variable
         //Zahl zwischen 200 und 700 - zufällig genereiert
         this.animate();
     }

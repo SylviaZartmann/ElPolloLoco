@@ -3,6 +3,7 @@ class MovableObject {
     imageCache = {};
     currentImage = 0;
     speed;
+    otherDirection = false;
 
     //bspw ('img/test.png')
     loadImage(path) {
@@ -26,6 +27,13 @@ class MovableObject {
     moveLeft(){
         setInterval(() => {
             this.positionX -= this.speed; //wie sich die x Koordinate verändern soll
-        }, 1000/60); //die millisekunden, die sich das Intervat wiederholen soll   
+        }, 1000/60); //die millisekunden, die sich das Interval wiederholen soll   
+    }
+
+    playAnimation(images) {
+        let i = this.currentImage % images.length; // % = Modulo funktion - gibt Rest aus
+        let path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
     }
 }

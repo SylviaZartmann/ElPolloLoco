@@ -4,7 +4,8 @@ RIGHT = false;
 UP = false;
 DOWN = false;
 SPACE = false;
-
+ACTION = false;
+NOTHING = true;
 
 
 }

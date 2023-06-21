@@ -10,7 +10,6 @@ function init (){
 }
 
 window.addEventListener("keydown", (e) => { //welche Taste wird gedrückt
-    console.log(e);
     if(e.keyCode == 39) {
         keyboard.RIGHT = true;
     }
@@ -37,6 +36,9 @@ window.addEventListener("keydown", (e) => { //welche Taste wird gedrückt
     }
     if(e.keyCode == 32) {
         keyboard.SPACE = true;
+    }
+    if(e.keyCode == 16) {
+        keyboard.ACTION = true;
     }
 });
 
@@ -67,5 +69,8 @@ window.addEventListener("keyup", (e) => { //welche Taste wird losgelassen
     }
     if(e.keyCode == 32) {
         keyboard.SPACE = false;
+    }
+    if(e.keyCode == 16) {
+        keyboard.ACTION = false;
     }
 });
