@@ -84,25 +84,30 @@ class Character extends MovableObject {
         this.moveRight(); //funktion in movable Objects gepackt, cleancode
       }
 
-      if (this.world.keyboard.LEFT && this.positionX > -615) {
-        //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
+      if (this.world.keyboard.LEFT && this.positionX > -615) { //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
         //nur wenn Left oder A gedrückt wird, wird Animation ausgeführt
         this.moveLeft(); //funktion in movable Objects gepackt, cleancode
         this.otherDirection = true; //um das Bild des Charas zu spiegeln
       }
 
-      if (this.world.keyboard.UP && !this.isAboveGround()) 
-        this.jump(); //funktion in movable Objects gepackt, cleancode
+      if (this.world.keyboard.UP && !this.isAboveGround()) {
+         this.jump();
+      } //funktion in movable Objects gepackt, cleancode
 
       this.world.camera_X = -this.positionX + 100; //wir heften die Verschiebung der x koordinate an den Charakter
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isAboveGround()) {
+      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
+        this.playAnimation(this.IMAGES_IDLE);
+      } else if (this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD);
+      } else if (this.isHurt()) {
+        this.playAnimation(this.IMAGES_HURT);
+      } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMPING);
       } else {
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-          //nur wenn Right gedrückt wird, wird Animation ausgeführt
+        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {//nur wenn Right ODER Left gedrückt wird, wird Animation ausgeführt
           this.playAnimation(this.IMAGES_WALKING);
         }
       }

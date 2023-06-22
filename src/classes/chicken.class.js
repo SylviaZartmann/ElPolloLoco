@@ -2,6 +2,7 @@ class Chicken extends MovableObject {
   positionY = 350;
   height = 75;
   width = 75;
+  charDamage = 5;
 
   IMAGES_WALKING = [
     "src/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
@@ -27,3 +28,11 @@ class Chicken extends MovableObject {
     }, 250);
   }
 }
+
+
+//if (character.positionX > chicken.positionX+chicken.width ||
+//    character-positionX > chick.postionX + chick.width ||
+//    character-positionX > endboss.postionX + endboss.width ) {
+//      this.moveRight();
+//      this.otherDirection = true;
+//    }

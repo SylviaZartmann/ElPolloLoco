@@ -11,7 +11,7 @@ const level1 = new level(
     ],
 
     endboss = [     
-        new Endboss(),
+        new Endboss()
     ],
 
     clouds = [     

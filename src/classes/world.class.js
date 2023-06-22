@@ -2,7 +2,6 @@ class World {
     character = new Character();
 
     level = level1; //wir können auf alle variablen von level zugreifen
-
     canvas;
     ctx;
     keyboard;
@@ -14,8 +13,22 @@ class World {
         this.keyboard = keyboard;
         this.draw();
         this.setWorld();
+        this.checkCollision();
     }
 
+    checkCollision() {
+        setInterval(() => {
+          [this.level.enemies, this.level.lowEnemies, this.level.endboss].forEach((allEnemies) => {
+            allEnemies.forEach((enemy) => {
+              if (this.character.isColliding(enemy)) {
+                this.character.hit(enemy); // jede Gegner hat anderen Damage
+                console.log('Lost Energy', this.character.energy);
+              }
+            });
+          });
+        }, 200);
+      }
+    
     draw() { //Reihenfolge bestimmt Darstellungsreihenfolge (Darstellungsebene())
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.camera_X, 0); //wir schieben den Kameraausschnitt nach links
@@ -41,17 +54,27 @@ class World {
 
     addToMap(mo) {
         if(mo.otherDirection) { //prüfen ob andere Richtung vorhanden
-            this.ctx.save(); //wenn ja, werden einstellungen vom Context gespeichert - womit wir Bilder einfügen
-            this.ctx.translate(mo.width, 0); //wenn ja, ändern der Methode, wie Bilder eingefügt werden
-            this.ctx.scale(-1, 1); //wenn ja, drehen wir an der y achse - spiegeln
-            mo.positionX = mo.positionX * -1; //wir spiegeln die x koordinate bzw. wandeln um
+            this.flipImage(mo); //runtergelagert
         }
-        this.ctx.drawImage(mo.img, mo.positionX, mo.positionY, mo.width, mo.height); //einfügen des Bildes gespiegelt oder nicht
+
+        mo.draw(this.ctx); //nach mov-obj ausgelagert
+        mo.drawFrame(this.ctx); //nach mov-obj ausgelagert
+        
         if(mo.otherDirection) { //prüfen ob context verändert wurde
-            mo.positionX = mo.positionX * -1;
-            this.ctx.restore(); //wenn ja, dann hiermit machen wir rückgängig
-            
+        this.flipImageBack(mo); //runtergelagert
         }
+    }
+
+    flipImage(mo) {
+        this.ctx.save(); //wenn ja, werden einstellungen vom Context gespeichert - womit wir Bilder einfügen
+        this.ctx.translate(mo.width, 0); //wenn ja, ändern der Methode, wie Bilder eingefügt werden
+        this.ctx.scale(-1, 1); //wenn ja, drehen wir an der y achse - spiegeln
+        mo.positionX = mo.positionX * -1; //wir spiegeln die x koordinate bzw. wandeln um
+    }
+
+    flipImageBack(mo) {
+        mo.positionX = mo.positionX * -1;
+        this.ctx.restore(); //wenn ja, dann hiermit machen wir rückgängig
     }
 
     setWorld () {

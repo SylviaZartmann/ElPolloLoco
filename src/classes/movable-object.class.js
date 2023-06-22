@@ -6,6 +6,8 @@ class MovableObject {
     otherDirection = false;
     speedY = 0; //vordefiniert "speedY"... nach bspw. 2 sekunden sind 10px gefallen
     acceleration = 2; //... pro Sekunde wird pixel hinzugefügt - Beschleunigungswert
+    energy = 100;
+    lastHit = 0;
 
     applyGravity(){ //wir implementieren Gravitation
         setInterval(() => {
@@ -35,6 +37,52 @@ class MovableObject {
         });
     }
 
+    draw (ctx) {
+        ctx.drawImage(this.img, this.positionX, this.positionY, this.width, this.height); //einfügen des Bildes gespiegelt oder nicht
+    }
+
+    drawFrame (ctx) {
+        //RAHMEN SETZEN um Objekte
+        if (this instanceof Character || this instanceof Chick || this instanceof Chicken || this instanceof Endboss) {
+            ctx.beginPath();
+            ctx.lineWidth = '5';
+            ctx.strokeStyle = 'red';
+            ctx.rect(this.positionX, this.positionY, this.width, this.height);
+            ctx.stroke();
+            }
+        }
+
+    isColliding(mo) {
+        return this.positionX + this.width > mo.positionX &&
+        this.positionX + this.width < mo.positionX + mo.width &&
+        this.positionY + this.height > mo.positionY ||
+        this.positionX > mo.positionX &&
+        this.positionX < mo.positionX + mo.width &&
+        this.positionY + this.height > mo.positionY ||
+        this.positionX < mo.positionX &&
+        this.positionX + this.width > mo.positionX + mo.width &&
+        this.positionY + this.height > mo.positionY;
+    }
+
+    hit (mo) {
+        this.energy -= mo.charDamage;
+        if (this.energy < 0) {
+            this.energy = 0;
+        } else {
+            this.lastHit = new Date().getTime(); //Zeitpunkt Speichern, wo verletzt wurde
+        }
+    }
+
+    isHurt() {
+        let timepassed = new Date().getTime() - this.lastHit; 
+        timepassed = timepassed / 1000; //in Sekunden
+        return timepassed < 1;
+    }
+
+    isDead() {
+        return this.energy == 0;
+    }
+
     moveRight(){
         //überprüfen mit < das Spielfeldende
         //nur wenn Right oder D gedrückt wird, wird Animation ausgeführt
@@ -54,7 +102,7 @@ class MovableObject {
     }
 
     jump() {
-        this.speedY = 30;  
+        this.speedY = 25;  
       }
 }
 
