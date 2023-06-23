@@ -77,7 +77,7 @@ window.addEventListener("keyup", (e) => { //welche Taste wird losgelassen
 });
 
 //AUFGABEN
-// Startscreen
+// Startscreen - Gegener sollen erst laufen, wenn  Screen weg (init)
 // Tastaturbelegung
 // Musik + Sounds
 // Coins platzieren und  einsammeln
@@ -88,3 +88,5 @@ window.addEventListener("keyup", (e) => { //welche Taste wird losgelassen
 // Kollision zum draufspringen bei Chicken + Chicks
 // Gameover Screen
 //Fullscreen für canvas fullscreen - canvas.requestFullscreen();
+// hübsch machen - Hintergrund + Schriftart
+// mobil spielbar machen
