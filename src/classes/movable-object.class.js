@@ -1,7 +1,4 @@
-class MovableObject {
-    img;
-    imageCache = {};
-    currentImage = 0;
+class MovableObject extends DrawableObject {
     speed;
     otherDirection = false;
     speedY = 0; //vordefiniert "speedY"... nach bspw. 2 sekunden sind 10px gefallen
@@ -19,38 +16,16 @@ class MovableObject {
     }
 
     isAboveGround (){
-        return this.positionY < 130; //wenn Chara in Pos unter 130 ist, fällt er bis y=130px
+        if (this instanceof ThrowableObject) { //werfbare Objekte sollten immer fallen
+            return true;
+        } else {
+            return this.positionY < 130; //wenn Chara in Pos unter 130 ist, fällt er bis y=130px
         //einzeln geschrieben und nicht oben direkt integriert, weil wir die funktion noch einzeln brauchen
-    }
-
-    //bspw ('img/test.png')
-    loadImage(path) {
-        this.img = new Image(); // this.img = document.getElementByID('image') <img id="image" src>
-        this.img.src = path;
-    }
-
-    loadImages(array) { //images werden in JSON gespeichert (in bspw character script ausgeführt mit entsprechenden bildern)
-        array.forEach((path) => { //rotieren durch vorhandenen Bilder in entspr. script hinterlegt bis durch
-        let img = new Image(); 
-        img.src = path;
-        this.imageCache[path] = img;
-        });
-    }
-
-    draw (ctx) {
-        ctx.drawImage(this.img, this.positionX, this.positionY, this.width, this.height); //einfügen des Bildes gespiegelt oder nicht
-    }
-
-    drawFrame (ctx) {
-        //RAHMEN SETZEN um Objekte
-        if (this instanceof Character || this instanceof Chick || this instanceof Chicken || this instanceof Endboss) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'red';
-            ctx.rect(this.positionX, this.positionY, this.width, this.height);
-            ctx.stroke();
-            }
+    
         }
+    }
+
+ 
 
     isColliding(mo) {
         return this.positionX + this.width > mo.positionX &&
@@ -97,7 +72,7 @@ class MovableObject {
     playAnimation(images) {
         let i = this.currentImage % images.length; // % = Modulo funktion - gibt Rest aus
         let path = images[i];
-        this.img = this.imageCache[path];
+        this.img = this.imageCache[path]; //laden Bild in Cache aus Pfad
         this.currentImage++;
     }
 

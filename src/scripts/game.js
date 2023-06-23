@@ -32,6 +32,9 @@ window.addEventListener("keydown", (e) => { //welche Taste wird gedrückt
     if(e.keyCode == 16) {
         keyboard.ACTION = true;
     }
+    if(e.keyCode == 67) {
+        keyboard.ACTION = true;
+    }
 });
 
 window.addEventListener("keyup", (e) => { //welche Taste wird losgelassen
@@ -67,4 +70,21 @@ window.addEventListener("keyup", (e) => { //welche Taste wird losgelassen
         keyboard.ACTION = false;
         let startIdleTime = new Date().getTime();
     }
+    if(e.keyCode == 67) {
+        keyboard.ACTION = false;
+        let startIdleTime = new Date().getTime();
+    }
 });
+
+//AUFGABEN
+// Startscreen
+// Tastaturbelegung
+// Musik + Sounds
+// Coins platzieren und  einsammeln
+// Flaschen platzieren und einsammeln
+// Flaschen nur werfen, wenn vorhanden 
+// Größen und Geschwindigkeiten
+// Flaschen mit Kollision
+// Kollision zum draufspringen bei Chicken + Chicks
+// Gameover Screen
+//Fullscreen für canvas fullscreen - canvas.requestFullscreen();
