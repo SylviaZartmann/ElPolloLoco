@@ -13,7 +13,7 @@ class Chicken extends MovableObject {
 
   constructor() {
     super().loadImage(this.IMAGES_DEAD[0]);
-    this.positionX = 500 + Math.random() * 500; //ohne super, weil variable //Zahl zwischen 200 und 700 - zufällig genereiert
+    this.positionX = 500 + Math.random() * 2000; //ohne super, weil variable //Zahl zwischen 200 und 700 - zufällig genereiert
     this.loadImages(this.IMAGES_WALKING); //es werden alle Bilder des chicken in Bewegung in JSON geladen
     this.speed = 0.15 + Math.random() * 0.35;
     this.animate();
