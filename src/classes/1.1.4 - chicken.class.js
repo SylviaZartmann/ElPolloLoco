@@ -3,6 +3,7 @@ class Chicken extends MovableObject {
   height = 75;
   width = 75;
   charDamage = 5;
+  world;
 
   IMAGES_WALKING = [
     "src/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
@@ -12,16 +13,16 @@ class Chicken extends MovableObject {
   IMAGES_DEAD = ['src/img/3_enemies_chicken/chicken_normal/2_dead/dead.png'];
 
   constructor() {
-    super().loadImage(this.IMAGES_DEAD[0]);
-    this.positionX = 500 + Math.random() * 2000; //ohne super, weil variable //Zahl zwischen 200 und 700 - zufällig genereiert
-    this.loadImages(this.IMAGES_WALKING); //es werden alle Bilder des chicken in Bewegung in JSON geladen
+    super().loadImage(this.IMAGES_WALKING[0]);
+    this.positionX = 500 + Math.random() * 2950;        //ohne super, weil variable 
+    this.loadImages(this.IMAGES_WALKING);               //es werden alle Bilder des chicken in Bewegung in JSON geladen
     this.speed = 0.15 + Math.random() * 0.35;
     this.animate();
   }
 
   animate() {
     setInterval(() => {
-        this.moveLeft(); //wie sich die x Koordinate verändern soll
+        this.moveLeft();                                //wie sich die x Koordinate verändern soll
     }, 1000/60);
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);

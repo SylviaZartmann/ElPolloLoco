@@ -5,6 +5,7 @@ class level {
   backgroundObject;
   endboss;
   level_end_x = 2950;
+  level_start_x =  -615;
 
   constructor(lowEnemies, enemies, endboss, clouds, BackgroundObject) {
     this.lowEnemies = lowEnemies;

@@ -3,6 +3,10 @@ class Character extends MovableObject {
   positionY = 130;
   height = 300;
   width = 150;
+  world; //der Charakter hat hiermit eine Variable "world", mit der wir auf die Variablen aus der Wolrd zugreifen können - auch Keyboard
+  //walking_sound = new Audio('src/audio/running.mp3');
+  speed = 5;
+
   IMAGES_IDLE = [
     "src/img/2_character_pepe/1_idle/idle/I-1.png",
     "src/img/2_character_pepe/1_idle/idle/I-2.png",
@@ -61,9 +65,7 @@ class Character extends MovableObject {
     "src/img/2_character_pepe/5_dead/D-57.png",
   ];
 
-  world; //der Charakter hat hiermit eine Variable "world", mit der wir auf die Variablen aus der Wolrd zugreifen können - auch Keyboard
-  //walking_sound = new Audio('src/audio/running.mp3');
-  speed = 5;
+
 
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
@@ -80,19 +82,18 @@ class Character extends MovableObject {
   animate() {
     setInterval(() => {
       //this.walking_sound.pause();
-      if (this.world.keyboard.RIGHT && this.positionX < this.world.level.level_end_x) {
-        this.moveRight(); //funktion in movable Objects gepackt, cleancode
+      if (this.world.keyboard.RIGHT && this.positionX < this.world.level.level_end_x) { //überprüfen mit < das Spielfeldende
+        this.moveRight();
       }
 
-      if (this.world.keyboard.LEFT && this.positionX > -615) { //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
-        //nur wenn Left oder A gedrückt wird, wird Animation ausgeführt
-        this.moveLeft(); //funktion in movable Objects gepackt, cleancode
-        this.otherDirection = true; //um das Bild des Charas zu spiegeln
+      if (this.world.keyboard.LEFT && this.positionX > this.world.level.level_start_x ) { //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
+        this.moveLeft();
+        this.otherDirection = true; //um das Bild zu spiegeln
       }
 
       if (this.world.keyboard.UP && !this.isAboveGround()) {
          this.jump();
-      } //funktion in movable Objects gepackt, cleancode
+      }
 
       this.world.camera_X = -this.positionX + 100; //wir heften die Verschiebung der x koordinate an den Charakter
     }, 1000 / 60);
