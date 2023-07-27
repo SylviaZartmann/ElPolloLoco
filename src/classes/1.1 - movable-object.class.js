@@ -1,41 +1,52 @@
 class MovableObject extends DrawableObject {
   speed;
   otherDirection = false;
-  speedY = 0;           //vordefiniert "speedY"... nach bspw. 2 sekunden sind 10px gefallen
+  fallingSpeedY = 0;
   acceleration = 2;     //... pro Sekunde wird pixel hinzugefügt - Beschleunigungswert
   energy = 100;
   lastHit = 0;
+  maxExistence = 2950;
+  minExistence =  -615;
 
-  applyGravity() {      //wir implementieren Gravitation
+  applyGravity() {
     setInterval(() => {
-      if (this.isAboveGround() || this.speedY > 0) {
-        this.positionY -= this.speedY;
-        this.speedY -= this.acceleration;
+      if (this.isAboveGround() || this.fallingSpeedY > 0) {
+        this.positionY -= this.fallingSpeedY;
+        this.fallingSpeedY -= this.acceleration;
       }
     }, 1000 / 25);
   }
 
   isAboveGround() {
-    if (this instanceof ThrowableObject) {    //werfbare Objekte sollten immer fallen
+    if (this instanceof ThrowableObject) {
       return true;
     } else {
-      return this.positionY < 130;            //wenn Chara in Pos unter 130 ist, fällt er bis y=130px
-                                              //einzeln geschrieben und nicht oben direkt integriert, weil wir die funktion noch einzeln brauchen
+      return this.positionY < 130;
     }
   }
 
   isColliding(mo) {
-    return (
-      (this.positionX + this.width > mo.positionX &&
-        this.positionX + this.width < mo.positionX + mo.width &&
-        this.positionY + this.height > mo.positionY) ||
-      (this.positionX > mo.positionX &&
-        this.positionX < mo.positionX + mo.width &&
-        this.positionY + this.height > mo.positionY) ||
-      (this.positionX < mo.positionX &&
-        this.positionX + this.width > mo.positionX + mo.width &&
-        this.positionY + this.height > mo.positionY)
-    );
+    this.rechteKanteChar = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
+    this.linkeKanteChar = this.positionX + this.bodyLeft;
+    this.untereKanteChar = (this.positionY + this.bodyTop) + (this.height - this.bodyBottom);
+
+    mo.rechteKanteEne = (mo.positionX + mo.bodyLeft) + (mo.width - mo.bodyRight);
+    mo.linkeKanteEne = mo.positionX + mo.bodyLeft;
+    mo.obereKanteEne = (mo.positionY + mo.bodyTop);
+
+    return(
+    //Variante 1 checkt ob rechte Kante kollidiert
+      (this.rechteKanteChar > mo.linkeKanteEne && //
+        this.rechteKanteChar < mo.rechteKanteEne &&
+        this.untereKanteChar > mo.obereKanteEne) ||
+      //Variante 2 checkt ob linke Kante kollidiert
+       (this.linkeKanteChar > mo.linkeKanteEne &&
+        this.linkeKanteChar < mo.rechteKanteEne && 
+        this.untereKanteChar > mo.obereKanteEne) ||
+       //Variante 3 checkt ob sich mo innerhalb Char befindet
+       (this.linkeKanteChar < mo.linkeKanteEne && 
+        this.rechteKanteChar > mo.rechteKanteEne && 
+        this.untereKanteChar > mo.obereKanteEne))
   }
 
   hit(mo) {
@@ -58,22 +69,21 @@ class MovableObject extends DrawableObject {
   }
 
   moveRight() {
-    this.positionX += this.speed;           
-    this.otherDirection = false;            //um das Bild des Charas zurückzuspiegeln
+    this.positionX += this.speed;
   }
 
   moveLeft() {
-    this.positionX -= this.speed;           //wie sich die x Koordinate verändern soll
+    this.positionX -= this.speed;
   }
 
   playAnimation(images) {
     let i = this.currentImage % images.length;      // % = Modulo funktion - gibt Rest aus
     let path = images[i];
-    this.img = this.imageCache[path];               //laden Bild in Cache aus Pfad
+    this.img = this.imageCache[path];
     this.currentImage++;
   }
 
   jump() {
-    this.speedY = 25;
+    this.fallingSpeedY = 25;
   }
 }

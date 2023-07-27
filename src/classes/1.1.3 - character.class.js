@@ -3,7 +3,12 @@ class Character extends MovableObject {
   positionY = 130;
   height = 300;
   width = 150;
-  world; //der Charakter hat hiermit eine Variable "world", mit der wir auf die Variablen aus der Wolrd zugreifen können - auch Keyboard
+  bodyLeft = 30;
+  bodyTop = 150;
+  bodyRight = 70;
+  bodyBottom = 165;
+
+  world;
   //walking_sound = new Audio('src/audio/running.mp3');
   speed = 5;
 
@@ -82,13 +87,14 @@ class Character extends MovableObject {
   animate() {
     setInterval(() => {
       //this.walking_sound.pause();
-      if (this.world.keyboard.RIGHT && this.positionX < this.world.level.level_end_x) { //überprüfen mit < das Spielfeldende
+      if (this.world.keyboard.RIGHT && this.positionX < this.maxExistence) {       //überprüfen mit < das Spielfeldende
         this.moveRight();
+        this.otherDirection = false; 
       }
 
-      if (this.world.keyboard.LEFT && this.positionX > this.world.level.level_start_x ) { //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
+      if (this.world.keyboard.LEFT && this.positionX > this.minExistence) {     //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
         this.moveLeft();
-        this.otherDirection = true; //um das Bild zu spiegeln
+        this.otherDirection = true;                   //um das Bild zu spiegeln
       }
 
       if (this.world.keyboard.UP && !this.isAboveGround()) {

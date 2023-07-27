@@ -1,11 +1,13 @@
 let canvas;
 let world;
-let keyboard = new Keyboard();
+
 
 function init() {
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
 }
+
+let keyboard = new Keyboard();
 
 window.addEventListener("keydown", (e) => {
   //welche Taste wird gedrückt
@@ -78,17 +80,4 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
-//AUFGABEN
-// Startscreen - Gegener sollen erst laufen, wenn  Screen weg (init)
-// Tastaturbelegung
-// Musik + Sounds
-// Coins platzieren und  einsammeln
-// Flaschen platzieren und einsammeln
-// Flaschen nur werfen, wenn vorhanden
-// Größen und Geschwindigkeiten
-// Flaschen mit Kollision
-// Kollision zum draufspringen bei Chicken + Chicks
-// Gameover Screen
-//Fullscreen für canvas fullscreen - canvas.requestFullscreen();
-// hübsch machen - Hintergrund + Schriftart
-// mobil spielbar machen
+

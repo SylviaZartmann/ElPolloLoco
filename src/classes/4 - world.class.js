@@ -1,17 +1,16 @@
 class World {
   character = new Character();
+  healthbar = new Healthbar();
+  bottlebar = new Bottlebar();
+  coinbar = new Coinbar();
 
   level = level1; //wir können auf alle variablen von level zugreifen
   canvas;
   ctx;
   keyboard;
   camera_X = 0;
-
+  
   throwableObjects = [];
-
-  healthbar = new Healthbar();
-  bottlebar = new Bottlebar();
-  coinbar = new Coinbar();
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -40,12 +39,12 @@ class World {
   }
 
   checkCollision() {
-    [this.level.enemies, this.level.lowEnemies, this.level.endboss].forEach(
-      (allEnemies) => {
+    let enemyTypes = [this.level.enemies, this.level.lowEnemies, this.level.endboss];
+    enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
           if (this.character.isColliding(enemy)) {
-            this.character.hit(enemy);                              // jede Gegner hat anderen Damage
-            this.healthbar.setPercentage(this.character.energy);    //Schaden, den der Chara nimmt, wird in die Statusbar überführt
+            this.character.hit(enemy);
+            this.healthbar.setPercentage(this.character.energy);
           }
         });
       }
@@ -74,10 +73,10 @@ class World {
     this.addBackgroundToMap(this.level.lowEnemies);
 
     this.ctx.translate(-this.camera_X, 0);                    //dann schieben wir den Kameraausschnitt nach rechts
-                                                              // Draw() wird immer wieder aufgerufen - neumalen des Canvas (FPS - frames per second)
+
     let self = this;
     requestAnimationFrame(() => {
-      self.draw();                                            //hier ist "this" unbekannt, daher außerhalb definieren
+      self.draw();              //hier ist "this" unbekannt, daher außerhalb definieren
     });
   }
 
@@ -88,15 +87,16 @@ class World {
   }
 
   addToMap(mo) {
-    if (mo.otherDirection) {            //prüfen ob andere Richtung vorhanden
-      this.flipImage(mo);               //runtergelagert
+    if (mo.otherDirection) { 
+      this.flipImage(mo); 
     }
 
-    mo.draw(this.ctx);                  //nach mov-obj ausgelagert
-    mo.drawFrame(this.ctx);             //nach mov-obj ausgelagert
+    mo.draw(this.ctx); 
+    mo.drawFrame(this.ctx);
+    mo.drawOffset(this.ctx)
 
-    if (mo.otherDirection) {            //prüfen ob context verändert wurde
-      this.flipImageBack(mo);           //runtergelagert
+    if (mo.otherDirection) { 
+      this.flipImageBack(mo);
     }
   }
 

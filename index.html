@@ -9,35 +9,96 @@
   <title>El Pollo Loco</title>
   <link rel="stylesheet" href="src/css/style.css">
 
-  <script src="src/classes/1 - drawable-object.class.js"></script>
-
-  <script src="src/classes/1.1 - movable-object.class.js"></script>
-  <script src="src/classes/1.1.1 - background.class.js"></script>
-  <script src="src/classes/1.1.2 - cloud.class.js"></script>
-  <script src="src/classes/1.1.3 - character.class.js"></script>
-  <script src="src/classes/1.1.4 - chicken.class.js"></script>
-  <script src="src/classes/1.1.5 - chick.class.js"></script>
-  <script src="src/classes/1.1.6 - endboss.class.js"></script>
-
-  <script src="src/classes/1.2 - statusbar-bottle.class.js"></script>
-  <script src="src/classes/1.3 - statusbar-coin.class.js"></script>
-  <script src="src/classes/1.4 - statusbar-health.class.js"></script>
-  <script src="src/classes/1.5 - throwable-object.class.js"></script>
-
-  <script src="src/classes/2 - keyboard.class.js"></script>
-  <script src="src/classes/3 - level.class.js"></script>
-  <script src="src/classes/4 - world.class.js"></script>
-     
-  <script src="src/levels/level1.js"></script>
-  <script src="src/scripts/game.js"></script>
 </head>
 
 <body onload="init()">
   <h1>El Pollo Loco</h1>
 
-  <canvas id="canvas" width="720px" height="480px">
+  <canvas id="canvas" width="720px" height="480px"></canvas>
 
-  </canvas>
+
+  <div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Startscreen - Gegener sollen erst laufen, wenn Screen weg (init)</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Tastaturbelegung</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Musik + Sounds</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Coins platzieren und einsammeln</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Flaschen platzieren und einsammeln</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Flaschen nur werfen, wenn vorhanden</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Größen und Geschwindigkeiten</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Flaschen mit Kollision</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Kollision zum draufspringen bei Chicken</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Wenn Chick gefunden, sollen Charakter folgen bis Endboss - laufen hinter Endboss</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Wenn 10x Chicken gefunden, Endboss erscheint</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Gameover Screen</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>Fullscreen für canvas fullscreen - canvas.requestFullscreen();</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>hübsch machen - Hintergrund + Schriftart</p>
+    </div>
+    <div style="display: flex; margin: 0; height: 20px; align-items: center;">
+      <input type="checkbox" name="" id="">
+      <p>mobil spielbar machen</p>
+    </div>
+  </div>
+
+  <script src="src/classes/1 - drawable-object.class.js"></script>
+  <script src="src/classes/1.1 - movable-object.class.js"></script>
+  <script src="src/classes/1.1.3 - character.class.js"></script>
+  <script src="src/classes/1.1.4 - chicken.class.js"></script>
+  <script src="src/classes/1.1.5 - chick.class.js"></script>
+  <script src="src/classes/1.1.2 - cloud.class.js"></script>
+
+  <script src="src/classes/1.2 - statusbar-bottle.class.js"></script>
+  <script src="src/classes/1.3 - statusbar-coin.class.js"></script>
+  <script src="src/classes/1.4 - statusbar-health.class.js"></script>
+  <script src="src/classes/4 - world.class.js"></script>
+  <script src="src/classes/1.1.1 - background.class.js"></script>
+  <script src="src/classes/2 - keyboard.class.js"></script>
+  <script src="src/classes/3 - level.class.js"></script>
+  <script src="src/classes/1.5 - throwable-object.class.js"></script>
+  <script src="src/classes/1.1.6 - endboss.class.js"></script>
+
+  <script src="src/levels/level1.js"></script>
+  <script src="src/scripts/game.js"></script>
 
 </body>
 
