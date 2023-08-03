@@ -1,12 +1,13 @@
 class Character extends MovableObject {
   positionX = 100;
-  positionY = 130;
-  height = 300;
-  width = 150;
+  positionY = 85;
+  height = 350;
+  width = 175;
   bodyLeft = 30;
   bodyTop = 150;
   bodyRight = 70;
   bodyBottom = 165;
+  currentTime;
 
   world;
   //walking_sound = new Audio('src/audio/running.mp3');
@@ -70,8 +71,6 @@ class Character extends MovableObject {
     "src/img/2_character_pepe/5_dead/D-57.png",
   ];
 
-
-
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_IDLE);
@@ -85,39 +84,49 @@ class Character extends MovableObject {
   }
 
   animate() {
+    resetLastMove(); 
     setInterval(() => {
       //this.walking_sound.pause();
       if (this.world.keyboard.RIGHT && this.positionX < this.maxExistence) {       //überprüfen mit < das Spielfeldende
         this.moveRight();
         this.otherDirection = false; 
-      }
-
+      } 
       if (this.world.keyboard.LEFT && this.positionX > this.minExistence) {     //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
         this.moveLeft();
-        this.otherDirection = true;                   //um das Bild zu spiegeln
-      }
-
+        this.otherDirection = true; 
+      } 
       if (this.world.keyboard.UP && !this.isAboveGround()) {
          this.jump();
-      }
-
-      this.world.camera_X = -this.positionX + 100; //wir heften die Verschiebung der x koordinate an den Charakter
+      } 
+      this.world.camera_X = -this.positionX + 100; 
     }, 1000 / 60);
 
     setInterval(() => {
-      if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_IDLE);
-      } else if (this.isDead()) {
+      if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
       } else if (this.isHurt()) {
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
         this.playAnimation(this.IMAGES_JUMPING);
-      } else {
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {//nur wenn Right ODER Left gedrückt wird, wird Animation ausgeführt
-          this.playAnimation(this.IMAGES_WALKING);
+      } else  if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.playAnimation(this.IMAGES_WALKING);
+      } else if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
+        var currentTime = new Date();
+        var passedTime = currentTime - lastMove;
+        if (passedTime >= 4000) {
+          this.playAnimation(this.IMAGES_LONGIDLE);
+        } else {
+          this.playAnimation(this.IMAGES_IDLE);
         }
       }
     }, 100);
-  }
+  } 
 }
+
+function resetLastMove() {
+  lastMove = new Date();
+}
+
+document.addEventListener ("keyup", function() {
+  resetLastMove();
+});

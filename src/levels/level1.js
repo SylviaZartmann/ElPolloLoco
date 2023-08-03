@@ -1,4 +1,5 @@
 const level1 = new level(
+  
   (lowEnemies = []),
 
   (enemies = [new Chicken()]),
@@ -74,5 +75,7 @@ const level1 = new level(
       "src/img/5_background/layers/1_first_layer/1.png",
       719 * 4
     ),
-  ])
+  ]),
+  
+  (egg = [new Eggstate()])
 );

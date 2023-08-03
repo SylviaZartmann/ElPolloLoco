@@ -2,7 +2,7 @@ class MovableObject extends DrawableObject {
   speed;
   otherDirection = false;
   fallingSpeedY = 0;
-  acceleration = 2;     //... pro Sekunde wird pixel hinzugefügt - Beschleunigungswert
+  acceleration = 2;     // Beschleunigungswert
   energy = 100;
   lastHit = 0;
   maxExistence = 2950;
@@ -21,7 +21,7 @@ class MovableObject extends DrawableObject {
     if (this instanceof ThrowableObject) {
       return true;
     } else {
-      return this.positionY < 130;
+      return this.positionY < 85;
     }
   }
 
@@ -55,12 +55,13 @@ class MovableObject extends DrawableObject {
       this.energy = 0;
     } else {
       this.lastHit = new Date().getTime();      //Zeitpunkt Speichern, wo verletzt wurde
+      resetLastMove();
     }
   }
 
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;
-    timepassed = timepassed / 1000;             //in Sekunden
+    timepassed = timepassed / 1000;
     return timepassed < 1;
   }
 
@@ -77,7 +78,7 @@ class MovableObject extends DrawableObject {
   }
 
   playAnimation(images) {
-    let i = this.currentImage % images.length;      // % = Modulo funktion - gibt Rest aus
+    let i = this.currentImage % images.length;      // % = Modulo Funktion
     let path = images[i];
     this.img = this.imageCache[path];
     this.currentImage++;

@@ -59,24 +59,24 @@ class World {
     this.addBackgroundToMap(this.level.backgroundObject);     //dann malen wir alle objekte
     this.addBackgroundToMap(this.level.clouds);
     this.addBackgroundToMap(this.throwableObjects);
+    this.ctx.translate(-this.camera_X, 0);                   //Kamera wird zurückgesetzt
 
-    this.ctx.translate(-this.camera_X, 0);                    //Kamera wird zurückgesetzt
     this.addToMap(this.healthbar);                            //statusbar wird mit dem Bild geführt
     this.addToMap(this.bottlebar);
     this.addToMap(this.coinbar);
 
     this.ctx.translate(this.camera_X, 0);                     //Kamera wird vorgesetzt
-
     this.addToMap(this.character);
     this.addBackgroundToMap(this.level.enemies);
     this.addBackgroundToMap(this.level.endboss);
     this.addBackgroundToMap(this.level.lowEnemies);
-
+    this.addBackgroundToMap(this.level.egg);
     this.ctx.translate(-this.camera_X, 0);                    //dann schieben wir den Kameraausschnitt nach rechts
 
-    let self = this;
+
+    let self = this;        //hier ist "this" unbekannt, daher außerhalb definieren
     requestAnimationFrame(() => {
-      self.draw();              //hier ist "this" unbekannt, daher außerhalb definieren
+      self.draw();              
     });
   }
 
@@ -101,18 +101,18 @@ class World {
   }
 
   flipImage(mo) {
-    this.ctx.save();                    //wenn ja, werden einstellungen vom Context gespeichert - womit wir Bilder einfügen
-    this.ctx.translate(mo.width, 0);    //wenn ja, ändern der Methode, wie Bilder eingefügt werden
-    this.ctx.scale(-1, 1);              //wenn ja, drehen wir an der y achse - spiegeln
-    mo.positionX = mo.positionX * -1;   //wir spiegeln die x koordinate bzw. wandeln um
+    this.ctx.save();
+    this.ctx.translate(mo.width, 0); 
+    this.ctx.scale(-1, 1);
+    mo.positionX = mo.positionX * -1;
   }
 
   flipImageBack(mo) {
     mo.positionX = mo.positionX * -1;
-    this.ctx.restore();                 //wenn ja, dann hiermit machen wir rückgängig
+    this.ctx.restore();
   }
 
   setWorld() {
-    this.character.world = this;        //nur "this" damit aktuelle instanz der Welt übergeben wird
+    this.character.world = this;
   }
 }
