@@ -43,25 +43,58 @@ class MovableObject extends DrawableObject {
        (this.linkeKanteChar > mo.linkeKanteEne &&
         this.linkeKanteChar < mo.rechteKanteEne && 
         this.untereKanteChar > mo.obereKanteEne) ||
-       //Variante 3 checkt ob sich mo innerhalb Char befindet
+       //Variante 3 checkt ob sich mo innerhalb Char befindet - für chicks relevant
        (this.linkeKanteChar < mo.linkeKanteEne && 
         this.rechteKanteChar > mo.rechteKanteEne && 
         this.untereKanteChar > mo.obereKanteEne))
   }
 
   isCollidingFromAbove(mo) {
-    return (
-      (this.rechteKanteChar > mo.linkeKanteEne && //
-        this.rechteKanteChar < mo.rechteKanteEne &&
-        this.untereKanteChar <= mo.obereKanteEne) ||
-      
-      (this.linkeKanteChar > mo.linkeKanteEne &&
-        this.linkeKanteChar < mo.rechteKanteEne && 
-        this.untereKanteChar <= mo.obereKanteEne) ||
+    this.linkeKanteChar = this.positionX + this.bodyLeft;
+    this.rechteKanteChar = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
+    this.picFrameKanteUnten = this.positionY + this.height;
+    this.charFrameKanteUnten = this.positionY + (this.height - this.bodyBottom);
 
+    mo.linkeKanteEne = mo.positionX + mo.bodyLeft;
+    mo.rechteKanteEne = (mo.positionX + mo.bodyLeft) + (mo.width - mo.bodyRight);
+    mo.picFrameKanteOben = mo.positionY;
+    mo.eneFrameKanteOben = mo.positionY - mo.bodyBottom;
+
+
+    // wenn rechts grün hinter rechts grün und hinter links grün &&
+    // wenn links grün vor rechts grün und vor links grün
+    // wenn unten grün unter oben rot && über oben grün
+    // wenn unten rot unter oben grün 
+    // wenn unten grün == oben grün
+    
+    
+    return (
+        //rechts grün hinter links grün
+      (this.rechteKanteChar > mo.linkeKanteEne && 
+        //rechts grün vor rechts grün
+        this.rechteKanteChar < mo.rechteKanteEne &&
+        //grün unten über oder gleich grün oben
+        this.charFrameKanteUnten < mo.eneFrameKanteOben &&
+        //grün unten unter oder gleich rot oben
+        this.charFrameKanteUnten > mo.picFrameKanteOben) ||
+      
+        //links grün hinter links grün
+      (this.linkeKanteChar > mo.linkeKanteEne &&
+        //links grün vor rechts grün
+        this.linkeKanteChar < mo.rechteKanteEne && 
+        //grün unten über grün oben
+        this.charFrameKanteUnten < mo.eneFrameKanteOben &&
+        //grün unten unter rot oben
+        this.charFrameKanteUnten > mo.picFrameKanteOben) ||
+
+        // links grün vor links grün
         (this.linkeKanteChar < mo.linkeKanteEne && 
+          // rechts grün hinter rechts grün
           this.rechteKanteChar > mo.rechteKanteEne && 
-          this.untereKanteChar <= mo.obereKanteEne))
+          //grün unten über grün oben
+        this.charFrameKanteUnten < mo.eneFrameKanteOben &&
+        //grün unten unter rot oben
+        this.charFrameKanteUnten > mo.picFrameKanteOben))
   }
 
   hit(mo) {
