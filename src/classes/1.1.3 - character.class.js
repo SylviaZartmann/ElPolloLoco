@@ -3,6 +3,7 @@ class Character extends MovableObject {
   positionY = 85;
   height = 350;
   width = 175;
+  enemDamage = 50;
   bodyLeft = 30;
   bodyTop = 150;
   bodyRight = 70;
@@ -96,7 +97,8 @@ class Character extends MovableObject {
         this.otherDirection = true; 
       } 
       if (this.world.keyboard.UP && !this.isAboveGround()) {
-         this.jump();
+        
+        this.jump();
       } 
       this.world.camera_X = -this.positionX + 100; 
     }, 1000 / 60);

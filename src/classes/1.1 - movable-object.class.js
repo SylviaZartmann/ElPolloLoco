@@ -1,7 +1,7 @@
 class MovableObject extends DrawableObject {
   speed;
   otherDirection = false;
-  fallingSpeedY = 0;
+  jumpingHeightY = 0;
   acceleration = 2;     // Beschleunigungswert
   energy = 100;
   lastHit = 0;
@@ -10,11 +10,11 @@ class MovableObject extends DrawableObject {
 
   applyGravity() {
     setInterval(() => {
-      if (this.isAboveGround() || this.fallingSpeedY > 0) {
-        this.positionY -= this.fallingSpeedY;
-        this.fallingSpeedY -= this.acceleration;
+      if (this.isAboveGround() || this.jumpingHeightY > 0) {
+        this.positionY -= this.jumpingHeightY;
+        this.jumpingHeightY -= this.acceleration; 
       }
-    }, 1000 / 25);
+    }, 1000/25);
   }
 
   isAboveGround() {
@@ -49,6 +49,21 @@ class MovableObject extends DrawableObject {
         this.untereKanteChar > mo.obereKanteEne))
   }
 
+  isCollidingFromAbove(mo) {
+    return (
+      (this.rechteKanteChar > mo.linkeKanteEne && //
+        this.rechteKanteChar < mo.rechteKanteEne &&
+        this.untereKanteChar <= mo.obereKanteEne) ||
+      
+      (this.linkeKanteChar > mo.linkeKanteEne &&
+        this.linkeKanteChar < mo.rechteKanteEne && 
+        this.untereKanteChar <= mo.obereKanteEne) ||
+
+        (this.linkeKanteChar < mo.linkeKanteEne && 
+          this.rechteKanteChar > mo.rechteKanteEne && 
+          this.untereKanteChar <= mo.obereKanteEne))
+  }
+
   hit(mo) {
     this.energy -= mo.charDamage;
     if (this.energy < 0) {
@@ -57,6 +72,14 @@ class MovableObject extends DrawableObject {
       this.lastHit = new Date().getTime();      //Zeitpunkt Speichern, wo verletzt wurde
       resetLastMove();
     }
+  }
+
+  killed(mo) {
+    mo.energy -= this.enemDamage;
+    if (mo.energy < 0) {
+      mo.energy = 0;
+      this.world.level.egg = new Eggstate();
+    } 
   }
 
   isHurt() {
@@ -85,6 +108,6 @@ class MovableObject extends DrawableObject {
   }
 
   jump() {
-    this.fallingSpeedY = 25;
+    this.jumpingHeightY = 25; // Sprunghöhe
   }
 }

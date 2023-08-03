@@ -24,6 +24,7 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollision();
+      this.checkCollisionFromAbove();
       this.checkThrowObjects();
     }, 200);
   }
@@ -51,6 +52,22 @@ class World {
     );
   }
 
+  checkCollisionFromAbove() {
+    let enemyTypes = [this.level.enemies];
+    enemyTypes.forEach((allEnemies) => {
+        allEnemies.forEach((enemy) => {
+          if (this.character.isCollidingFromAbove(enemy)) {
+            //const landingHeight = enemy.positionY - this.character.height;
+            //this.character.setPosition(this.character.positionX, landingHeight);    
+            //this.character.jump();
+            //this.character.killed(enemy);
+            console.log('above Enemy');
+          }
+        });
+      }
+    );
+  }
+
   draw() {
     //Reihenfolge bestimmt Darstellungsreihenfolge (Darstellungsebene())
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -59,6 +76,7 @@ class World {
     this.addBackgroundToMap(this.level.backgroundObject);     //dann malen wir alle objekte
     this.addBackgroundToMap(this.level.clouds);
     this.addBackgroundToMap(this.throwableObjects);
+    this.addBackgroundToMap(this.level.egg);
     this.ctx.translate(-this.camera_X, 0);                   //Kamera wird zurückgesetzt
 
     this.addToMap(this.healthbar);                            //statusbar wird mit dem Bild geführt
@@ -70,7 +88,7 @@ class World {
     this.addBackgroundToMap(this.level.enemies);
     this.addBackgroundToMap(this.level.endboss);
     this.addBackgroundToMap(this.level.lowEnemies);
-    this.addBackgroundToMap(this.level.egg);
+    
     this.ctx.translate(-this.camera_X, 0);                    //dann schieben wir den Kameraausschnitt nach rechts
 
 

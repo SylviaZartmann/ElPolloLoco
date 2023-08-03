@@ -2,6 +2,7 @@ class Chicken extends MovableObject {
   positionY = 350;
   height = 75;
   width = 75;
+  energy = 10;
   charDamage = 5;
   movementRange = 150;
   bodyLeft = 0;
@@ -54,6 +55,10 @@ class Chicken extends MovableObject {
     }, 1000/60);
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
+      //if (this.energy < 0) {
+     //   this.playAnimation(this.IMAGES_DEAD);
+      //  this.world.level.egg = new Eggstate();
+      //}
     }, 250);
   }
 }
