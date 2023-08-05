@@ -25,8 +25,9 @@ class Chicken extends MovableObject {
       this.findStartPosition();
     }
     this.loadImages(this.IMAGES_WALKING);               //es werden alle Bilder des chicken in Bewegung in JSON geladen
+    this.loadImages(this.IMAGES_DEAD); 
     this.speed = 0.5 + Math.random() * 0.75;
-    //this.animate();
+    this.animate();
   }
 
   findStartPosition() {
@@ -37,36 +38,33 @@ class Chicken extends MovableObject {
   animate() {
     this.movementState = 'moveLeft';
     setInterval(() => {
-      if (this.movementState === 'moveLeft') {
+      if (this.movementState === 'moveLeft' && !this.isDead()) {
         this.moveLeft();
         this.otherDirection = false; 
     
         if (this.positionX <= this.startPosition - this.movementRange) {
           this.movementState = 'moveRight';
         }
-      } else if (this.movementState === 'moveRight') {
+      } else if (this.movementState === 'moveRight' && !this.isDead()) {
         this.moveRight();
         this.otherDirection = true; 
     
-        if (this.positionX >= this.startPosition + this.movementRange) {
+        if (this.positionX >= this.startPosition + this.movementRange && !this.isDead()) {
           this.movementState = 'moveLeft';
         }
+      }
+      if (this.isDead()) {
+        this.charDamage = 0;
+        setTimeout(() => {
+          this.positionY += this.bodyRight;
+        }, 2000);
       }
     }, 1000/60);
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
-      //if (this.energy < 0) {
-     //   this.playAnimation(this.IMAGES_DEAD);
-      //  this.world.level.egg = new Eggstate();
-      //}
+      if (this.isDead()) {
+      this.playAnimation(this.IMAGES_DEAD);
+      }
     }, 250);
   }
 }
-
-
-//if (character.positionX > chicken.positionX+chicken.width ||
-//    character-positionX > chick.postionX + chick.width ||
-//    character-positionX > endboss.postionX + endboss.width ) {
-//      this.moveRight();
-//      this.otherDirection = true;
-//    }

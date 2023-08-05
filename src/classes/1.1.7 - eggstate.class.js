@@ -1,8 +1,9 @@
 class Eggstate extends MovableObject {
   positionY = 375;
-  positionX = 350;
+  positionX;
   height = 40;
   width = 40;
+  chickAdded = false;
 
   IMAGES_EGGSTATE_SHAKING = [
     "src/img/10_egg/egg_normal.png",
@@ -19,8 +20,10 @@ class Eggstate extends MovableObject {
     "src/img/10_egg/egg_crack04.png"
   ]
 
-  constructor() {
+  constructor(positionX, existance) {
     super().loadImage(this.IMAGES_EGGSTATE_SHAKING[0]);
+    this.positionX = positionX;
+    this.existance = existance;
     this.loadImages(this.IMAGES_EGGSTATE_SHAKING);
     this.loadImages(this.IMAGES_EGGSTATE_CRACKING);
     this.animate();
@@ -28,7 +31,14 @@ class Eggstate extends MovableObject {
 
   animate() {
     setInterval(() => {
-      this.playAnimation(this.IMAGES_EGGSTATE_SHAKING);
+      let currentTime = new Date();
+      let elapsedTime = currentTime - this.existance;
+      if (elapsedTime < 5000) {
+        this.playAnimation(this.IMAGES_EGGSTATE_SHAKING);
+      } else {
+        this.playAnimationOnce(this.IMAGES_EGGSTATE_CRACKING, this.positionX);
+      }
     }, 250);
+    
   }
 }

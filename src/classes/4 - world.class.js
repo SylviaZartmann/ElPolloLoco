@@ -9,7 +9,7 @@ class World {
   ctx;
   keyboard;
   camera_X = 0;
-  
+
   throwableObjects = [];
 
   constructor(canvas, keyboard) {
@@ -24,7 +24,6 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollision();
-      this.checkCollisionFromAbove();
       this.checkThrowObjects();
     }, 200);
   }
@@ -40,8 +39,9 @@ class World {
   }
 
   checkCollision() {
-    let enemyTypes = [this.level.enemies, this.level.lowEnemies, this.level.endboss];
-    enemyTypes.forEach((allEnemies) => {
+    if (this.character.positionY === 85) {
+      let enemyTypes = [this.level.enemies, this.level.endboss];
+      enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
           if (this.character.isColliding(enemy)) {
             this.character.hit(enemy);
@@ -49,23 +49,35 @@ class World {
           }
         });
       }
-    );
-  }
-
-  checkCollisionFromAbove() {
-    let enemyTypes = [this.level.enemies];
-    enemyTypes.forEach((allEnemies) => {
+      )
+    };
+    if (this.character.positionY < 85) {
+      let enemyTypes = [this.level.enemies];
+      enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
-          if (this.character.isCollidingFromAbove(enemy)) {
-            //const landingHeight = enemy.positionY - this.character.height;
-            //this.character.setPosition(this.character.positionX, landingHeight);    
-            //this.character.jump();
-            //this.character.killed(enemy);
-            console.log('killed Enemy');
+          if (this.character.isCollidingFromAbove(enemy) && this.character.jumpingHeightY <= 0) {
+            this.character.killed(enemy);
+            this.character.jump();
+            this.level.egg.push(new Eggstate(enemy.positionX, new Date()));
           }
         });
       }
-    );
+      );
+    }
+  }
+
+  checkPositions() {
+    let enemyTypes = [this.level.lowEnemies]
+    enemyTypes.forEach((allEnemies) => {
+      allEnemies.forEach((enemy) => {
+        if (this.character.isInFrontOf(enemy)) {
+          enemy.moveLeft();
+        }
+        if (this.character.isBehind(enemy)) {
+          enemy.moveRight();
+        }
+      })
+    })
   }
 
   draw() {
@@ -88,13 +100,13 @@ class World {
     this.addBackgroundToMap(this.level.enemies);
     this.addBackgroundToMap(this.level.endboss);
     this.addBackgroundToMap(this.level.lowEnemies);
-    
+
     this.ctx.translate(-this.camera_X, 0);                    //dann schieben wir den Kameraausschnitt nach rechts
 
 
     let self = this;        //hier ist "this" unbekannt, daher außerhalb definieren
     requestAnimationFrame(() => {
-      self.draw();              
+      self.draw();
     });
   }
 
@@ -105,22 +117,22 @@ class World {
   }
 
   addToMap(mo) {
-    if (mo.otherDirection) { 
-      this.flipImage(mo); 
+    if (mo.otherDirection) {
+      this.flipImage(mo);
     }
 
-    mo.draw(this.ctx); 
+    mo.draw(this.ctx);
     mo.drawFrame(this.ctx);
     mo.drawOffset(this.ctx)
 
-    if (mo.otherDirection) { 
+    if (mo.otherDirection) {
       this.flipImageBack(mo);
     }
   }
 
   flipImage(mo) {
     this.ctx.save();
-    this.ctx.translate(mo.width, 0); 
+    this.ctx.translate(mo.width, 0);
     this.ctx.scale(-1, 1);
     mo.positionX = mo.positionX * -1;
   }
@@ -133,4 +145,5 @@ class World {
   setWorld() {
     this.character.world = this;
   }
+
 }

@@ -77,5 +77,5 @@ const level1 = new level(
     ),
   ]),
   
-  (egg = [new Eggstate()])
+  (egg = [new Eggstate(350)])
 );

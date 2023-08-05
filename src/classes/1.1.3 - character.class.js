@@ -77,7 +77,7 @@ class Character extends MovableObject {
     super().loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_LONGIDLE);
-    this.loadImages(this.IMAGES_WALKING); //es werden alle Bilder des Charakters in Bewebung in JSON geladen
+    this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
@@ -89,18 +89,22 @@ class Character extends MovableObject {
     resetLastMove(); 
     setInterval(() => {
       //this.walking_sound.pause();
-      if (this.world.keyboard.RIGHT && this.positionX < this.maxExistence) {       //überprüfen mit < das Spielfeldende
+      if (this.world.keyboard.RIGHT && this.positionX < this.maxExistence && !this.isDead()) {
         this.moveRight();
         this.otherDirection = false; 
       } 
-      if (this.world.keyboard.LEFT && this.positionX > this.minExistence) {     //kann mit Abfrage > 0 nicht mehr aus dem Bild laufen
+      if (this.world.keyboard.LEFT && this.positionX > this.minExistence && !this.isDead()) {
         this.moveLeft();
         this.otherDirection = true; 
       } 
-      if (this.world.keyboard.UP && !this.isAboveGround()) {
+      if (this.world.keyboard.UP && !this.isAboveGround() && !this.isDead()) {
         this.jump();
       }  
-
+      if (this.isDead()) {
+        setTimeout(() => {
+          this.positionY += 5;
+        }, 500);
+      }
       this.world.camera_X = -this.positionX + 100; 
     }, 1000 / 60);
 
@@ -116,17 +120,13 @@ class Character extends MovableObject {
       } else if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
         var currentTime = new Date();
         var passedTime = currentTime - lastMove;
-        if (passedTime >= 4000) {
+        if (passedTime >= 5000) {
           this.playAnimation(this.IMAGES_LONGIDLE);
         } else {
           this.playAnimation(this.IMAGES_IDLE);
         }
       }
     }, 100);
-  //setInterval(() => {
-  //  this.realpositionY = this.positionY;
-  //  console.log(this.realpositionY);
-  //}, 1000/60);
   } 
 
 }
