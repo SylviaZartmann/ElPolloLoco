@@ -25,6 +25,7 @@ class World {
     setInterval(() => {
       this.checkCollision();
       this.checkThrowObjects();
+      this.checkPositions();
     }, 200);
   }
 
@@ -67,14 +68,14 @@ class World {
   }
 
   checkPositions() {
-    let enemyTypes = [this.level.lowEnemies]
+    let enemyTypes = [this.level.lowEnemies];
     enemyTypes.forEach((allEnemies) => {
       allEnemies.forEach((enemy) => {
         if (this.character.isInFrontOf(enemy)) {
-          enemy.moveLeft();
+          console.log('in Front of Chick')
         }
         if (this.character.isBehind(enemy)) {
-          enemy.moveRight();
+          console.log('Behind Chick')
         }
       })
     })

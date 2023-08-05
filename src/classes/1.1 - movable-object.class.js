@@ -146,20 +146,20 @@ class MovableObject extends DrawableObject {
     this.PositionX = this.positionX + this.bodyLeft;
     this.PositionXRight = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
     return (
-      chick.PositionX >= this.PositionX || 
-      chick.PositionX >= this.PositionXRight || 
-      chick.PositionX + chick.width >= this.PositionX || 
-      chick.PositionX + chick.width >= this.PositionXRight)
+      chick.positionX >= this.PositionX && 
+      chick.positionX >= this.PositionXRight && 
+      chick.positionX + chick.width >= this.PositionX && 
+      chick.positionX + chick.width >= this.PositionXRight)
   }
 
   isBehind(chick) {
     this.PositionX = this.positionX + this.bodyLeft;
     this.PositionXRight = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
     return (
-      chick.PositionX <= this.PositionX || 
-      chick.PositionX <= this.PositionXRight || 
-      chick.PositionX + chick.width <= this.PositionX || 
-      chick.PositionX + chick.width <= this.PositionXRight)
+      chick.positionX <= this.PositionX && 
+      chick.positionX <= this.PositionXRight && 
+      chick.positionX + chick.width <= this.PositionX && 
+      chick.positionX + chick.width <= this.PositionXRight)
   }
 
 }
