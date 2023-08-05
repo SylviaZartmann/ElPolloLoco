@@ -9,6 +9,7 @@ class Character extends MovableObject {
   bodyRight = 70;
   bodyBottom = 165;
   currentTime;
+  realpositionY;
 
   world;
   //walking_sound = new Audio('src/audio/running.mp3');
@@ -98,7 +99,8 @@ class Character extends MovableObject {
       } 
       if (this.world.keyboard.UP && !this.isAboveGround()) {
         this.jump();
-      } 
+      }  
+
       this.world.camera_X = -this.positionX + 100; 
     }, 1000 / 60);
 
@@ -121,7 +123,12 @@ class Character extends MovableObject {
         }
       }
     }, 100);
+  //setInterval(() => {
+  //  this.realpositionY = this.positionY;
+  //  console.log(this.realpositionY);
+  //}, 1000/60);
   } 
+
 }
 
 function resetLastMove() {
@@ -131,3 +138,4 @@ function resetLastMove() {
 document.addEventListener ("keyup", function() {
   resetLastMove();
 });
+

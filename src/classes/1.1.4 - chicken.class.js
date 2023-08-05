@@ -1,5 +1,5 @@
 class Chicken extends MovableObject {
-  positionY = 410;
+  positionY = 350;
   height = 75;
   width = 75;
   energy = 10;
@@ -26,7 +26,7 @@ class Chicken extends MovableObject {
     }
     this.loadImages(this.IMAGES_WALKING);               //es werden alle Bilder des chicken in Bewegung in JSON geladen
     this.speed = 0.5 + Math.random() * 0.75;
-    this.animate();
+    //this.animate();
   }
 
   findStartPosition() {

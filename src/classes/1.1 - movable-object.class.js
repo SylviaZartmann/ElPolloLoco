@@ -2,29 +2,57 @@ class MovableObject extends DrawableObject {
   speed;
   otherDirection = false;
   jumpingHeightY = 0;
-  acceleration = 2;     // Beschleunigungswert
+  acceleration = 0.7;     // Beschleunigungswert
   energy = 100;
   lastHit = 0;
   maxExistence = 2950;
   minExistence =  -615;
 
   applyGravity() {
-    setInterval(() => {
-      if (this.isAboveGround() || this.jumpingHeightY > 0) {
-        this.positionY -= this.jumpingHeightY;
-        this.jumpingHeightY -= this.acceleration; 
-      }
-    }, 1000/25);
-  }
+    let isMovingUp = true;
+    this.originalPositionY = 85;
 
+  setInterval(() => {
+    if (this.isAboveGround() || this.jumpingHeightY > 0) {
+      if (isMovingUp) {
+        if (this.jumpingHeightY <= 10) {
+          this.jumpingHeightY++;
+          this.positionY -= this.jumpingHeightY;
+          this.jumpingHeightY -= this.acceleration;
+        } else {
+          isMovingUp = false;
+        }
+      } else {
+        if (this.positionY < this.originalPositionY) {
+          this.positionY += this.jumpingHeightY;
+          this.jumpingHeightY += this.acceleration;
+        } else {
+          isMovingUp = true;
+        }
+      }
+      console.log('positionY', this.positionY);
+    }
+  }, 1000/50);
+  }
+  
   isAboveGround() {
     if (this instanceof ThrowableObject) {
       return true;
     } else {
-      return this.positionY < 85;
+      return this.positionY < 85
     }
+  }  
+  
+  jump() {
+    this.jumpingHeightY = 1; // Sprunghöhe
+    this.positionY = 85;
   }
-
+/**
+ * checks collision between Character and enemies
+ * at first if character and enemies are in default state
+ * second if charcter and enemies changed direction
+ * last if enemies are inside of the character
+ */
   isColliding(mo) {
     this.rechteKanteChar = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
     this.linkeKanteChar = this.positionX + this.bodyLeft;
@@ -35,15 +63,14 @@ class MovableObject extends DrawableObject {
     mo.obereKanteEne = (mo.positionY + mo.bodyTop);
 
     return(
-    //Variante 1 checkt ob rechte Kante kollidiert
-      (this.rechteKanteChar > mo.linkeKanteEne && //
+      (this.rechteKanteChar > mo.linkeKanteEne && 
         this.rechteKanteChar < mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne) ||
-      //Variante 2 checkt ob linke Kante kollidiert
+        this.untereKanteChar > mo.obereKanteEne) 
+        ||
        (this.linkeKanteChar > mo.linkeKanteEne &&
         this.linkeKanteChar < mo.rechteKanteEne && 
-        this.untereKanteChar > mo.obereKanteEne) ||
-       //Variante 3 checkt ob sich mo innerhalb Char befindet - für chicks relevant
+        this.untereKanteChar > mo.obereKanteEne) 
+        ||
        (this.linkeKanteChar < mo.linkeKanteEne && 
         this.rechteKanteChar > mo.rechteKanteEne && 
         this.untereKanteChar > mo.obereKanteEne))
@@ -52,49 +79,28 @@ class MovableObject extends DrawableObject {
   isCollidingFromAbove(mo) {
     this.linkeKanteChar = this.positionX + this.bodyLeft;
     this.rechteKanteChar = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
-    this.picFrameKanteUnten = this.positionY + this.height;
-    this.charFrameKanteUnten = this.positionY + (this.height - this.bodyBottom);
+    this.charFrameKanteUnten = this.offTop + this.offBottom;
 
     mo.linkeKanteEne = mo.positionX + mo.bodyLeft;
     mo.rechteKanteEne = (mo.positionX + mo.bodyLeft) + (mo.width - mo.bodyRight);
-    mo.picFrameKanteOben = mo.positionY;
-    mo.eneFrameKanteOben = mo.positionY - mo.bodyBottom;
+    mo.eneFrameKanteOben = mo.offTop;
+    mo.eneFrameKanteUnten = mo.offTop + mo.offBottom;
 
-
-    // wenn rechts grün hinter rechts grün und hinter links grün &&
-    // wenn links grün vor rechts grün und vor links grün
-    // wenn unten grün unter oben rot && über oben grün
-    // wenn unten rot unter oben grün 
-    // wenn unten grün == oben grün
-    
-    
     return (
-        //rechts grün hinter links grün
-      (this.rechteKanteChar > mo.linkeKanteEne && 
-        //rechts grün vor rechts grün
-        this.rechteKanteChar < mo.rechteKanteEne &&
-        //grün unten über oder gleich grün oben
-        this.charFrameKanteUnten < mo.eneFrameKanteOben &&
-        //grün unten unter oder gleich rot oben
-        this.charFrameKanteUnten > mo.picFrameKanteOben) ||
-      
-        //links grün hinter links grün
-      (this.linkeKanteChar > mo.linkeKanteEne &&
-        //links grün vor rechts grün
-        this.linkeKanteChar < mo.rechteKanteEne && 
-        //grün unten über grün oben
-        this.charFrameKanteUnten < mo.eneFrameKanteOben &&
-        //grün unten unter rot oben
-        this.charFrameKanteUnten > mo.picFrameKanteOben) ||
-
-        // links grün vor links grün
-        (this.linkeKanteChar < mo.linkeKanteEne && 
-          // rechts grün hinter rechts grün
-          this.rechteKanteChar > mo.rechteKanteEne && 
-          //grün unten über grün oben
-        this.charFrameKanteUnten < mo.eneFrameKanteOben &&
-        //grün unten unter rot oben
-        this.charFrameKanteUnten > mo.picFrameKanteOben))
+      (this.charFrameKanteUnten <= mo.eneFrameKanteOben &&
+      mo.eneFrameKanteOben - this.charFrameKanteUnten <= 20 && 
+      this.linkeKanteChar <= mo.linkeKanteEne &&
+      this.rechteKanteChar >= mo.rechteKanteEne) 
+      ||
+      (this.charFrameKanteUnten <= mo.eneFrameKanteOben &&
+      mo.eneFrameKanteOben - this.charFrameKanteUnten <= 20 && 
+      this.linkeKanteChar > mo.linkeKanteEne &&
+      this.linkeKanteChar < mo.rechteKanteEne) 
+      ||
+      (this.charFrameKanteUnten <= mo.eneFrameKanteOben &&
+      mo.eneFrameKanteOben - this.charFrameKanteUnten <= 20 && 
+      this.rechteKanteChar > mo.linkeKanteEne &&
+      this.rechteKanteChar < mo.rechteKanteEne ))
   }
 
   hit(mo) {
@@ -140,7 +146,4 @@ class MovableObject extends DrawableObject {
     this.currentImage++;
   }
 
-  jump() {
-    this.jumpingHeightY = 25; // Sprunghöhe
-  }
 }

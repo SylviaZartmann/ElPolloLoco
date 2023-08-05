@@ -46,6 +46,7 @@ class DrawableObject {
     this.offTop =  this.positionY + this.bodyTop; 
     this.offRight = this.width - this.bodyRight;
     this.offBottom = this.height - this.bodyBottom;
+    
     if (
       this instanceof Character ||
       this instanceof Chick ||

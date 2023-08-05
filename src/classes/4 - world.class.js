@@ -61,7 +61,7 @@ class World {
             //this.character.setPosition(this.character.positionX, landingHeight);    
             //this.character.jump();
             //this.character.killed(enemy);
-            console.log('above Enemy');
+            console.log('killed Enemy');
           }
         });
       }
