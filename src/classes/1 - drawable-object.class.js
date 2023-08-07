@@ -22,7 +22,7 @@ class DrawableObject {
       this.positionX,
       this.positionY,
       this.width,
-      this.height
+      this.height,
     );
   }
 

@@ -2,11 +2,18 @@ class Endboss extends MovableObject {
   positionY = 50;
   height = 400;
   width = 400;
-  charDamage = 10;
-  offsetLeft = 60;
-  offsetTop = 120;
-  offsetRight = -120;
-  offsetBottom = -150;
+  charDamage = 20;
+  speed = 1;
+  energy = 100;
+  bodyLeft = 60;
+  bodyTop = 120;
+  bodyRight = 120;
+  bodyBottom = 150;
+  alerted = false;
+  attacking = false;
+  attacked = false;
+  jumpingwidth = 20;
+  movingDirection = 'left';
 
   IMAGES_WALKING = [
     "src/img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -46,15 +53,51 @@ class Endboss extends MovableObject {
   ];
 
   constructor() {
-    super().loadImage(this.IMAGES_ALERTING[0]);
-    this.positionX = 500;
-    this.loadImages(this.IMAGES_ALERTING); //es werden alle Bilder des Endboss in JSON geladen
+    super().loadImage(this.IMAGES_WALKING[0]);
+    this.positionX = 2500;
+    this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_ALERTING);
+    this.loadImages(this.IMAGES_ATTACKING);
+    this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_DEAD);
     this.animate();
   }
 
   animate() {
     setInterval(() => {
-      this.playAnimation(this.IMAGES_ALERTING);
-    }, 250);
+      if (!this.alerted && !this.attacking && !this.isDead()) {
+        this.charDamage = 30;
+        this.moveLeft();
+
+      }
+      if (this.attacking && this.imageOfInterest && !this.isDead()) {
+        this.charDamage = 35;
+        this.positionX = this.positionX - this.jumpingwidth;
+      }
+
+      if (this.isDead()) {
+        this.charDamage = 0;
+      }
+    }, 1000/60);
+    setInterval(() => {
+      if (!this.alerted && !this.attacking && !this.isDead()) {
+        this.playAnimation(this.IMAGES_WALKING);
+      }
+      if (this.alerted && !this.attacking) {
+        this.playAnimation(this.IMAGES_ALERTING);
+      }
+      if (this.attacking && !this.alerted) {
+        this.playAnimation(this.IMAGES_ATTACKING);
+        this.currentAttackingPicture();
+        }
+    }, 175);
+  }
+
+  currentAttackingPicture(){
+    if (this.img.currentSrc.includes('G18')) {
+      return this.imageOfInterest = true;
+    } else {
+      return this.imageOfInterest = false;
+    }
   }
 }

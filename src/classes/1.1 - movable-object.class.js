@@ -117,7 +117,7 @@ class MovableObject extends DrawableObject {
   }
 
   jump() {
-    this.jumpingHeightY = 25; // Sprunghöhe
+    this.jumpingHeightY = 25;
   }
 
   playAnimation(images) {
@@ -144,6 +144,7 @@ class MovableObject extends DrawableObject {
     }
   }
 
+
   chickBecomesChicken() {
     const index = world.level.lowEnemies.indexOf(this);
     if (!this.chickenAdded) {
@@ -159,11 +160,13 @@ class MovableObject extends DrawableObject {
   }
 
   helloEndboss() {
-    if (this.killedChicken >= 20) {
+    if(!this.endbossAdded) {
+      if (this.killedChicken >= 20) {
+      this.endbossAdded = true;
       world.level.endboss.push(new Endboss());
     }
+    }
   }
-
 
   isInFrontOf(chick) {
     this.PositionX = this.positionX + this.bodyLeft;
@@ -183,5 +186,11 @@ class MovableObject extends DrawableObject {
       chick.positionX + 60 <= this.PositionXRight &&
       chick.positionX + chick.width + 60 <= this.PositionX &&
       chick.positionX + chick.width + 60 <= this.PositionXRight)
+  }
+  
+  checkDistance(endboss) {
+    endboss.leftEdge = endboss.positionX + endboss.bodyLeft;
+    this.distance = endboss.leftEdge - this.rechteKanteChar;
+    return this.distance;
   }
 }

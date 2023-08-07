@@ -9,7 +9,7 @@ class Character extends MovableObject {
   bodyRight = 70;
   bodyBottom = 165;
   currentTime;
-  killedChicken = 0;
+  killedChicken = 20;
   killedEndboss = 0;
 
   world;

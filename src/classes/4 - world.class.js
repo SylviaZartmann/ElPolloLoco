@@ -53,13 +53,19 @@ class World {
       )
     };
     if (this.character.positionY < 85) {
-      let enemyTypes = [this.level.enemies];
+      let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
           if (this.character.isCollidingFromAbove(enemy) && this.character.jumpingHeightY <= 0) {
-            this.character.killed(enemy);
-            this.character.jump();
-            this.level.egg.push(new Eggstate(enemy.positionX, new Date()));
+            if (enemy instanceof Chicken) { 
+              this.character.killed(enemy);
+              this.character.jump();
+              this.level.egg.push(new Eggstate(enemy.positionX, new Date()));
+          }
+          if (enemy instanceof Endboss) {
+            this.character.hit(enemy);
+            this.healthbar.setPercentage(this.character.energy);
+          }
           }
         });
       }
@@ -68,7 +74,7 @@ class World {
   }
 
   checkPositions() {
-    let enemyTypes = [this.level.lowEnemies];
+    let enemyTypes = [this.level.lowEnemies, this.level.endboss];
     enemyTypes.forEach((allEnemies) => {
       allEnemies.forEach((enemy) => {
         if (this.character.isInFrontOf(enemy)) {
@@ -76,6 +82,20 @@ class World {
         }
         if (this.character.isBehind(enemy)) {
           enemy.movingDirection = 'right';
+        }
+        if (enemy instanceof Endboss) {
+          if (this.character.checkDistance(enemy)) {
+            if (this.character.distance <= 150) {
+              enemy.alerted = false;
+              enemy.attacking = true;    
+            } else if (this.character.distance <= 300 && this.character.distance >= 150) {
+              enemy.alerted = true;
+              enemy.attacking = false; 
+            } else {
+              enemy.alerted = false;
+              enemy.attacking = false;
+            } 
+          }
         }
       });
     });
@@ -97,13 +117,12 @@ class World {
     this.addToMap(this.coinbar);
 
     this.ctx.translate(this.camera_X, 0);                     //Kamera wird vorgesetzt
+    this.addBackgroundToMap(this.level.endboss);
     this.addToMap(this.character);
     this.addBackgroundToMap(this.level.enemies);
-    this.addBackgroundToMap(this.level.endboss);
     this.addBackgroundToMap(this.level.lowEnemies);
 
     this.ctx.translate(-this.camera_X, 0);                    //dann schieben wir den Kameraausschnitt nach rechts
-
 
     let self = this;        //hier ist "this" unbekannt, daher außerhalb definieren
     requestAnimationFrame(() => {
@@ -147,3 +166,4 @@ class World {
     this.character.world = this;
   }
 }
+
