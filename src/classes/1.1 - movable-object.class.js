@@ -5,7 +5,7 @@ class MovableObject extends DrawableObject {
   acceleration = 2;     // Beschleunigungswert
   energy = 100;
   lastHit = 0;
-  maxExistence = 2550;
+  maxExistence = 719*3;
   minExistence = -615;
 
   applyGravity() {
@@ -64,16 +64,16 @@ class MovableObject extends DrawableObject {
     mo.obereKanteEne = (mo.positionY + mo.bodyTop);
 
     return (
-      (this.rechteKanteChar > mo.linkeKanteEne &&
-        this.rechteKanteChar < mo.rechteKanteEne &&
+      (this.rechteKanteChar + 20 > mo.linkeKanteEne &&
+        this.rechteKanteChar - 20 < mo.rechteKanteEne &&
         this.untereKanteChar > mo.obereKanteEne - 25)
       ||
-      (this.linkeKanteChar > mo.linkeKanteEne &&
-        this.linkeKanteChar < mo.rechteKanteEne &&
+      (this.linkeKanteChar +20 > mo.linkeKanteEne &&
+        this.linkeKanteChar -20 < mo.rechteKanteEne &&
         this.untereKanteChar > mo.obereKanteEne - 25)
       ||
-      (this.linkeKanteChar < mo.linkeKanteEne &&
-        this.rechteKanteChar > mo.rechteKanteEne &&
+      (this.linkeKanteChar -20 < mo.linkeKanteEne &&
+        this.rechteKanteChar + 20 > mo.rechteKanteEne &&
         this.untereKanteChar > mo.obereKanteEne - 25))
   }
 
@@ -90,6 +90,8 @@ class MovableObject extends DrawableObject {
   }
 
   killed(mo) {
+    if (mo instanceof Chicken) this.killedChicken++;
+    if (mo instanceof Endboss) this.killedEndboss++;
     mo.energy -= this.enemDamage;
     if (mo.energy < 0) {
       mo.energy = 0;
@@ -113,7 +115,7 @@ class MovableObject extends DrawableObject {
   moveLeft() {
     this.positionX -= this.speed;
   }
-  
+
   jump() {
     this.jumpingHeightY = 25; // Sprunghöhe
   }
@@ -133,33 +135,53 @@ class MovableObject extends DrawableObject {
         this.img = this.imageCache[path];
         this.currentImage++;
         if (i === 4) {
-            this.chickAdded = true;
-            setTimeout(() => {
-              world.level.lowEnemies.push(new Chick(positionX));
-            }, 800);
+          this.chickAdded = true;
+          setTimeout(() => {
+            world.level.lowEnemies.push(new Chick(positionX, new Date()));
+          }, 800);
         }
       }
     }
   }
 
+  chickBecomesChicken() {
+    const index = world.level.lowEnemies.indexOf(this);
+    if (!this.chickenAdded) {
+      let currentTime = new Date();
+      if (currentTime - this.hetchTime >= 20000) {
+        this.chickenAdded = true;
+        world.level.enemies.push(new Chicken(this.positionX, this.movingDirection));
+        if (index !== -1) {
+          world.level.lowEnemies.splice(index, 1);
+        }
+      }
+    }
+  }
+
+  helloEndboss() {
+    if (this.killedChicken >= 20) {
+      world.level.endboss.push(new Endboss());
+    }
+  }
+
+
   isInFrontOf(chick) {
     this.PositionX = this.positionX + this.bodyLeft;
     this.PositionXRight = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
     return (
-      chick.positionX >= this.PositionX && 
-      chick.positionX >= this.PositionXRight && 
-      chick.positionX + chick.width >= this.PositionX && 
-      chick.positionX + chick.width >= this.PositionXRight)
+      chick.positionX - 60 >= this.PositionX &&
+      chick.positionX - 60 >= this.PositionXRight &&
+      chick.positionX + chick.width - 60 >= this.PositionX &&
+      chick.positionX + chick.width - 60 >= this.PositionXRight)
   }
 
   isBehind(chick) {
     this.PositionX = this.positionX + this.bodyLeft;
     this.PositionXRight = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
     return (
-      chick.positionX <= this.PositionX && 
-      chick.positionX <= this.PositionXRight && 
-      chick.positionX + chick.width <= this.PositionX && 
-      chick.positionX + chick.width <= this.PositionXRight)
+      chick.positionX + 60 <= this.PositionX &&
+      chick.positionX + 60 <= this.PositionXRight &&
+      chick.positionX + chick.width + 60 <= this.PositionX &&
+      chick.positionX + chick.width + 60 <= this.PositionXRight)
   }
-
 }

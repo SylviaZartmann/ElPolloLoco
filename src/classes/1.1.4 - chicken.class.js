@@ -9,6 +9,7 @@ class Chicken extends MovableObject {
   bodyTop = 20;
   bodyRight = 10;
   bodyBottom = 35;
+  
 
   IMAGES_WALKING = [
     "src/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
@@ -18,43 +19,53 @@ class Chicken extends MovableObject {
   
   IMAGES_DEAD = ['src/img/3_enemies_chicken/chicken_normal/2_dead/dead.png'];
 
-  constructor() {
+  constructor(positionX, movingDirection) {
     super().loadImage(this.IMAGES_WALKING[0]);
-    this.findStartPosition();
-    while (this.positionX >= 0 && this.positionX <= 500) {
-      this.findStartPosition();
-    }
+    this.movingDirection = movingDirection;
+    this.isPositionX(positionX);
     this.loadImages(this.IMAGES_WALKING);               //es werden alle Bilder des chicken in Bewegung in JSON geladen
     this.loadImages(this.IMAGES_DEAD); 
     this.speed = 0.5 + Math.random() * 0.75;
     this.animate();
   }
 
+  isPositionX(positionX) {
+    if (positionX === 9999) {
+      this.findStartPosition();
+      while (this.positionX >= 0 && this.positionX <= 500) {
+        this.findStartPosition();
+    }
+    } else {
+      this.positionX = positionX;
+      this.startPosition = positionX;
+    }
+  }
+
   findStartPosition() {
-    this.positionX = this.minExistence + Math.random() * this.maxExistence;
-    this.startPosition = this.positionX;
+      this.positionX = this.minExistence + Math.random() * this.maxExistence;
+      this.startPosition = this.positionX;
   }
 
   animate() {
-    this.movementState = 'moveLeft';
     setInterval(() => {
-      if (this.movementState === 'moveLeft' && !this.isDead()) {
+      if (this.movingDirection === 'left' && !this.isDead()) {
         this.moveLeft();
         this.otherDirection = false; 
     
         if (this.positionX <= this.startPosition - this.movementRange) {
-          this.movementState = 'moveRight';
+          this.movingDirection = 'right';
         }
-      } else if (this.movementState === 'moveRight' && !this.isDead()) {
+      } else if (this.movingDirection === 'right' && !this.isDead()) {
         this.moveRight();
         this.otherDirection = true; 
     
         if (this.positionX >= this.startPosition + this.movementRange && !this.isDead()) {
-          this.movementState = 'moveLeft';
+          this.movingDirection = 'left';
         }
       }
       if (this.isDead()) {
         this.charDamage = 0;
+        this.bodyTop = 500;
         setTimeout(() => {
           this.positionY += this.bodyRight;
         }, 2000);

@@ -2,6 +2,7 @@ class Chick extends MovableObject {
   positionY = 390;
   height = 35;
   width = 35;
+  movingDirection = 'left';
  
   IMAGES_WALKING = [
     "src/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
@@ -11,30 +12,32 @@ class Chick extends MovableObject {
 
   IMAGES_DEAD = ['src/img/3_enemies_chicken/chicken_small/2_dead/dead.png'];
 
-  constructor(positionX) {
+  constructor(positionX, hetchTime) {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.positionX = positionX;
+    this.hetchTime = hetchTime;
     this.loadImages(this.IMAGES_WALKING);
-    this.speed = 0.2 + Math.random() * 0.45;
+    this.speed = 1.2 + Math.random() * 1.5;
     this.animate();
+    
   }
 
   animate() {
-    setInterval(() => {
+    setTimeout(() => {
+      setInterval(() => {
+      if (this.movingDirection == 'left') {
         this.moveLeft();
-        
+        this.otherDirection = false;
+      }
+      if (this.movingDirection == 'right') {
+        this.moveRight();
+        this.otherDirection = true;
+      }
+      this.chickBecomesChicken();
     }, 1000/60);
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, 150);
+    }, 1000);
   }
 }
-
-
-
-//if (character.positionX > chicken.positionX+chicken.width ||
-//    character-positionX > chick.postionX + chick.width ||
-//    character-positionX > endboss.postionX + endboss.width ) {
-//      this.moveRight();
-//      this.otherDirection = true;
-//    }

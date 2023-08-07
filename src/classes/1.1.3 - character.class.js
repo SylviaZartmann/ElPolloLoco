@@ -9,7 +9,8 @@ class Character extends MovableObject {
   bodyRight = 70;
   bodyBottom = 165;
   currentTime;
-  realpositionY;
+  killedChicken = 0;
+  killedEndboss = 0;
 
   world;
   //walking_sound = new Audio('src/audio/running.mp3');
@@ -106,6 +107,7 @@ class Character extends MovableObject {
         }, 500);
       }
       this.world.camera_X = -this.positionX + 100; 
+      this.helloEndboss();
     }, 1000 / 60);
 
     setInterval(() => {
@@ -118,8 +120,9 @@ class Character extends MovableObject {
       } else  if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playAnimation(this.IMAGES_WALKING);
       } else if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
-        var currentTime = new Date();
-        var passedTime = currentTime - lastMove;
+        this.resetpositionY();
+        let currentTime = new Date();
+        let passedTime = currentTime - lastMove;
         if (passedTime >= 5000) {
           this.playAnimation(this.IMAGES_LONGIDLE);
         } else {
@@ -129,6 +132,9 @@ class Character extends MovableObject {
     }, 100);
   } 
 
+  resetpositionY() {
+    this.positionY = 85;
+  }
 }
 
 function resetLastMove() {

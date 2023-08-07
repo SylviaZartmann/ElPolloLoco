@@ -4,7 +4,7 @@ class World {
   bottlebar = new Bottlebar();
   coinbar = new Coinbar();
 
-  level = level1; //wir können auf alle variablen von level zugreifen
+  level = level1;
   canvas;
   ctx;
   keyboard;
@@ -72,13 +72,13 @@ class World {
     enemyTypes.forEach((allEnemies) => {
       allEnemies.forEach((enemy) => {
         if (this.character.isInFrontOf(enemy)) {
-          console.log('in Front of Chick')
+          enemy.movingDirection = 'left';
         }
         if (this.character.isBehind(enemy)) {
-          console.log('Behind Chick')
+          enemy.movingDirection = 'right';
         }
-      })
-    })
+      });
+    });
   }
 
   draw() {
@@ -146,5 +146,4 @@ class World {
   setWorld() {
     this.character.world = this;
   }
-
 }
