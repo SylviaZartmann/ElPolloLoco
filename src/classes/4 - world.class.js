@@ -31,12 +31,23 @@ class World {
 
   checkThrowObjects() {
     if (this.keyboard.ACTION) {
-      let bottle = new ThrowableObject(
-        this.character.positionX,
-        this.character.positionY
-      );
-      this.throwableObjects.push(bottle);
+      if (!this.character.otherDirection) {
+        this.throwingLeftOrRight(+100, +200);
+      } else {
+        this.throwingLeftOrRight(+20, +200);
+      }
+      
     }
+  }
+
+  throwingLeftOrRight(x, y) {
+    let bottle = new ThrowableObject(
+      this.character.positionX + x,
+      this.character.positionY + y,
+      this.character.otherDirection,
+
+    );
+    this.throwableObjects.push(bottle);
   }
 
   checkCollision() {
@@ -44,7 +55,7 @@ class World {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
-          if (this.character.isColliding(enemy)) {
+          if (this.character.isColliding(enemy, 0)) {
             this.character.hit(enemy);
             this.healthbar.setPercentage(this.character.energy);
           }
@@ -56,7 +67,7 @@ class World {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
-          if (this.character.isCollidingFromAbove(enemy) && this.character.jumpingHeightY <= 0) {
+          if (this.character.isColliding(enemy, 25) && this.character.jumpingHeightY <= 0) {
             if (enemy instanceof Chicken) { 
               this.character.killed(enemy);
               this.character.jump();

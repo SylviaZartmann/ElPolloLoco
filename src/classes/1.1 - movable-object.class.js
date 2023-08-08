@@ -1,7 +1,7 @@
 class MovableObject extends DrawableObject {
   speed;
   otherDirection = false;
-  jumpingHeightY = 0;
+  fallingSpeedY = 0;
   acceleration = 2;     // Beschleunigungswert
   energy = 100;
   lastHit = 0;
@@ -10,9 +10,9 @@ class MovableObject extends DrawableObject {
 
   applyGravity() {
     setInterval(() => {
-      if (this.isAboveGround() && !this.isDead() || this.jumpingHeightY > 0) {
-        this.positionY -= this.jumpingHeightY;
-        this.jumpingHeightY -= this.acceleration;
+      if (this.isAboveGround() && !this.isDead() || this.fallingSpeedY > 0) {
+        this.positionY -= this.fallingSpeedY ;
+        this.fallingSpeedY -= this.acceleration;
       }
     }, 1000 / 25);
   }
@@ -31,7 +31,7 @@ class MovableObject extends DrawableObject {
    * second if charcter and enemies changed direction
    * last if enemies are inside of the character
    */
-  isColliding(mo) {
+  isColliding(mo, regulation) {
     this.rechteKanteChar = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
     this.linkeKanteChar = this.positionX + this.bodyLeft;
     this.untereKanteChar = (this.positionY + this.bodyTop) + (this.height - this.bodyBottom);
@@ -41,40 +41,17 @@ class MovableObject extends DrawableObject {
     mo.obereKanteEne = (mo.positionY + mo.bodyTop);
 
     return (
-      (this.rechteKanteChar > mo.linkeKanteEne &&
-        this.rechteKanteChar < mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne)
+      (this.rechteKanteChar + regulation > mo.linkeKanteEne &&
+        this.rechteKanteChar - regulation < mo.rechteKanteEne &&
+        this.untereKanteChar > mo.obereKanteEne - regulation)
       ||
-      (this.linkeKanteChar > mo.linkeKanteEne &&
-        this.linkeKanteChar < mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne)
+      (this.linkeKanteChar + regulation > mo.linkeKanteEne &&
+        this.linkeKanteChar - regulation< mo.rechteKanteEne &&
+        this.untereKanteChar > mo.obereKanteEne -regulation)
       ||
-      (this.linkeKanteChar < mo.linkeKanteEne &&
-        this.rechteKanteChar > mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne))
-  }
-
-  isCollidingFromAbove(mo) {
-    this.linkeKanteChar = this.positionX + this.bodyLeft;
-    this.rechteKanteChar = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
-    this.untereKanteChar = (this.positionY + this.bodyTop) + (this.height - this.bodyBottom);
-
-    mo.linkeKanteEne = mo.positionX + mo.bodyLeft;
-    mo.rechteKanteEne = (mo.positionX + mo.bodyLeft) + (mo.width - mo.bodyRight);
-    mo.obereKanteEne = (mo.positionY + mo.bodyTop);
-
-    return (
-      (this.rechteKanteChar + 20 > mo.linkeKanteEne &&
-        this.rechteKanteChar - 20 < mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne - 25)
-      ||
-      (this.linkeKanteChar +20 > mo.linkeKanteEne &&
-        this.linkeKanteChar -20 < mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne - 25)
-      ||
-      (this.linkeKanteChar -20 < mo.linkeKanteEne &&
-        this.rechteKanteChar + 20 > mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne - 25))
+      (this.linkeKanteChar + regulation < mo.linkeKanteEne &&
+        this.rechteKanteChar - regulation > mo.rechteKanteEne &&
+        this.untereKanteChar > mo.obereKanteEne - regulation))
   }
 
   hit(mo) {
@@ -117,7 +94,7 @@ class MovableObject extends DrawableObject {
   }
 
   jump() {
-    this.jumpingHeightY = 25;
+    this.fallingSpeedY = 25;
   }
 
   playAnimation(images) {

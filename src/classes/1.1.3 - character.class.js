@@ -9,8 +9,9 @@ class Character extends MovableObject {
   bodyRight = 70;
   bodyBottom = 165;
   currentTime;
-  killedChicken = 20;
+  killedChicken = 0;
   killedEndboss = 0;
+  alive = true;
 
   world;
   //walking_sound = new Audio('src/audio/running.mp3');
@@ -73,6 +74,12 @@ class Character extends MovableObject {
     "src/img/2_character_pepe/5_dead/D-56.png",
     "src/img/2_character_pepe/5_dead/D-57.png",
   ];
+  IMAGES_THROW = [
+    "src/img/2_character_pepe/6_throw/T-60.png",
+    "src/img/2_character_pepe/6_throw/T-61.png",
+    "src/img/2_character_pepe/6_throw/T-62.png",
+    "src/img/2_character_pepe/6_throw/T-63.png",
+  ];
 
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
@@ -82,6 +89,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
+    this.loadImages(this.IMAGES_THROW);
     this.applyGravity();
     this.animate();
   }
@@ -102,10 +110,12 @@ class Character extends MovableObject {
         this.jump();
       }  
       if (this.isDead()) {
+        this.alive = false;
         setTimeout(() => {
           this.positionY += 5;
         }, 500);
       }
+      
       this.world.camera_X = -this.positionX + 100; 
       this.helloEndboss();
     }, 1000 / 60);
@@ -119,7 +129,9 @@ class Character extends MovableObject {
         this.playAnimation(this.IMAGES_JUMPING);
       } else  if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.playAnimation(this.IMAGES_WALKING);
-      } else if (!this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
+      } else if (this.world.keyboard.ACTION) {
+        this.playAnimation(this.IMAGES_THROW);
+      } else if (!this.world.keyboard.ACTION && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
         this.resetpositionY();
         let currentTime = new Date();
         let passedTime = currentTime - lastMove;
@@ -128,7 +140,7 @@ class Character extends MovableObject {
         } else {
           this.playAnimation(this.IMAGES_IDLE);
         }
-      }
+      } 
     }, 100);
   } 
 
