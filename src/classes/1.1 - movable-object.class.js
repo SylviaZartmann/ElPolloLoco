@@ -5,13 +5,13 @@ class MovableObject extends DrawableObject {
   acceleration = 2;     // Beschleunigungswert
   energy = 100;
   lastHit = 0;
-  maxExistence = 719*3;
+  maxExistence = 719 * 3;
   minExistence = -615;
 
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() && !this.isDead() || this.fallingSpeedY > 0) {
-        this.positionY -= this.fallingSpeedY ;
+        this.positionY -= this.fallingSpeedY;
         this.fallingSpeedY -= this.acceleration;
       }
     }, 1000 / 25);
@@ -19,9 +19,9 @@ class MovableObject extends DrawableObject {
 
   isAboveGround() {
     if (this instanceof ThrowableObject) {
-      return true;
-    } else {
-      return this.positionY < 85
+      return this.positionY < 400;
+    } else if (this instanceof Character) {
+      return this.positionY < 85;
     }
   }
 
@@ -31,28 +31,37 @@ class MovableObject extends DrawableObject {
    * second if charcter and enemies changed direction
    * last if enemies are inside of the character
    */
-  isColliding(mo, regulation) {
-    this.rechteKanteChar = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
-    this.linkeKanteChar = this.positionX + this.bodyLeft;
-    this.untereKanteChar = (this.positionY + this.bodyTop) + (this.height - this.bodyBottom);
-
-    mo.rechteKanteEne = (mo.positionX + mo.bodyLeft) + (mo.width - mo.bodyRight);
-    mo.linkeKanteEne = mo.positionX + mo.bodyLeft;
-    mo.obereKanteEne = (mo.positionY + mo.bodyTop);
-
+  isColliding(mo) {
     return (
-      (this.rechteKanteChar + regulation > mo.linkeKanteEne &&
-        this.rechteKanteChar - regulation < mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne - regulation)
+      (this.offsetX + this.offsetWidth > mo.offsetX &&
+        this.offsetX + this.offsetWidth < mo.offsetX + mo.offsetWidth &&
+        this.offsetY + this.offsetHeight > mo.offsetY)
       ||
-      (this.linkeKanteChar + regulation > mo.linkeKanteEne &&
-        this.linkeKanteChar - regulation< mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne -regulation)
+      (this.offsetX > mo.offsetX &&
+        this.offsetX < mo.offsetX + mo.offsetWidth &&
+        this.offsetY + this.offsetHeight > mo.offsetY)
       ||
-      (this.linkeKanteChar + regulation < mo.linkeKanteEne &&
-        this.rechteKanteChar - regulation > mo.rechteKanteEne &&
-        this.untereKanteChar > mo.obereKanteEne - regulation))
+      (this.offsetX < mo.offsetX &&
+        this.offsetX + this.offsetWidth > mo.offsetX + mo.offsetWidth &&
+        this.offsetY + this.offsetHeight > mo.offsetY))
   }
+
+  isCollidingFromAbove(mo) {
+    console.log('checking colision')
+    return (
+      (this.offsetX + this.offsetWidth > mo.offsetX &&
+        this.offsetX + this.offsetWidth < mo.offsetX + mo.offsetWidth &&
+        this.offsetY + this.offsetHeight > mo.offsetY - 50)
+      ||
+      (this.offsetX > mo.offsetX &&
+        this.offsetX < mo.offsetX + mo.offsetWidth &&
+        this.offsetY + this.offsetHeight > mo.offsetY)
+      ||
+      (this.offsetX < mo.offsetX &&
+        this.offsetX + this.offsetWidth > mo.offsetX + mo.offsetWidth &&
+        this.offsetY + this.offsetHeight > mo.offsetY))
+  }
+
 
   hit(mo) {
     if (mo.charDamage > 0) {
@@ -105,22 +114,24 @@ class MovableObject extends DrawableObject {
   }
 
   playAnimationOnce(images, positionX) {
-    if (!this.chickAdded) {
+    if (!this.animationPlayed) {
       this.currentImage = 0;
       for (let i = 0; i < images.length; i++) {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
-        if (i === 4) {
-          this.chickAdded = true;
+          if (i === 4 && this instanceof Eggstate) {
+          this.animationPlayed = true;  
           setTimeout(() => {
             world.level.lowEnemies.push(new Chick(positionX, new Date()));
           }, 800);
+        } else if (i === 5 && this instanceof ThrowableObject) {
+          this.animationPlayed = true;
+          this.splashed = true;
         }
       }
     }
   }
-
 
   chickBecomesChicken() {
     const index = world.level.lowEnemies.indexOf(this);
@@ -137,37 +148,32 @@ class MovableObject extends DrawableObject {
   }
 
   helloEndboss() {
-    if(!this.endbossAdded) {
+    if (!this.endbossAdded) {
       if (this.killedChicken >= 20) {
-      this.endbossAdded = true;
-      world.level.endboss.push(new Endboss());
-    }
+        this.endbossAdded = true;
+        world.level.endboss.push(new Endboss());
+      }
     }
   }
 
   isInFrontOf(chick) {
-    this.PositionX = this.positionX + this.bodyLeft;
-    this.PositionXRight = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
     return (
-      chick.positionX - 60 >= this.PositionX &&
-      chick.positionX - 60 >= this.PositionXRight &&
-      chick.positionX + chick.width - 60 >= this.PositionX &&
-      chick.positionX + chick.width - 60 >= this.PositionXRight)
+      chick.positionX - 60 >= this.offsetX &&
+      chick.positionX - 60 >= this.offsetX + this.offsetWidth &&
+      chick.positionX + chick.width - 60 >= this.offsetX &&
+      chick.positionX + chick.width - 60 >= this.offsetX + this.offsetWidth)
   }
 
   isBehind(chick) {
-    this.PositionX = this.positionX + this.bodyLeft;
-    this.PositionXRight = (this.positionX + this.bodyLeft) + (this.width - this.bodyRight);
     return (
-      chick.positionX + 60 <= this.PositionX &&
-      chick.positionX + 60 <= this.PositionXRight &&
-      chick.positionX + chick.width + 60 <= this.PositionX &&
-      chick.positionX + chick.width + 60 <= this.PositionXRight)
+      chick.positionX + 60 <= this.offsetX &&
+      chick.positionX + 60 <= this.offsetX + this.offsetWidth &&
+      chick.positionX + chick.width + 60 <= this.offsetX &&
+      chick.positionX + chick.width + 60 <= this.offsetX + this.offsetWidth)
   }
-  
+
   checkDistance(endboss) {
-    endboss.leftEdge = endboss.positionX + endboss.bodyLeft;
-    this.distance = endboss.leftEdge - this.rechteKanteChar;
+    this.distance = endboss.positionX - this.offsetX + this.offsetWidth;
     return this.distance;
   }
 }

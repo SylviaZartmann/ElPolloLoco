@@ -41,12 +41,11 @@ class DrawableObject {
     }
   }
 
+
+
   drawOffset(ctx) {
-    this.offLeft = this.positionX + this.bodyLeft;
-    this.offTop =  this.positionY + this.bodyTop; 
-    this.offRight = this.width - this.bodyRight;
-    this.offBottom = this.height - this.bodyBottom;
-    
+    this.offsetX = this.positionX + this.offsetPositionX;
+    this.offsetY = this.positionY + this.offsetPositionY;
     if (
       this instanceof Character ||
       this instanceof Chick ||
@@ -56,7 +55,7 @@ class DrawableObject {
       ctx.beginPath();
       ctx.lineWidth = "5";
       ctx.strokeStyle = "green";
-      ctx.rect(this.offLeft, this.offTop, this.offRight, this.offBottom);
+      ctx.rect(this.offsetX, this.offsetY, this.offsetWidth, this.offsetHeight);
       ctx.stroke();
     }
   }

@@ -55,7 +55,7 @@ class World {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
-          if (this.character.isColliding(enemy, 0)) {
+          if (this.character.isColliding(enemy)) {
             this.character.hit(enemy);
             this.healthbar.setPercentage(this.character.energy);
           }
@@ -63,20 +63,22 @@ class World {
       }
       )
     };
-    if (this.character.positionY < 85) {
+    if (this.character.isAboveGround()) {
+      console.log(this.character.positionY)
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
-          if (this.character.isColliding(enemy, 25) && this.character.jumpingHeightY <= 0) {
+          if (this.character.isCollidingFromAbove(enemy) && this.character.jumpingHeightY <= 0) {
+            console.log('colision')
             if (enemy instanceof Chicken) { 
+              
               this.character.killed(enemy);
               this.character.jump();
               this.level.egg.push(new Eggstate(enemy.positionX, new Date()));
-          }
-          if (enemy instanceof Endboss) {
+          } else {
             this.character.hit(enemy);
             this.healthbar.setPercentage(this.character.energy);
-          }
+            }
           }
         });
       }
@@ -119,7 +121,7 @@ class World {
     this.ctx.translate(this.camera_X, 0);                     //wir schieben den Kameraausschnitt nach links
     this.addBackgroundToMap(this.level.backgroundObject);     //dann malen wir alle objekte
     this.addBackgroundToMap(this.level.clouds);
-    this.addBackgroundToMap(this.throwableObjects);
+    
     this.addBackgroundToMap(this.level.egg);
     this.ctx.translate(-this.camera_X, 0);                   //Kamera wird zurückgesetzt
 
@@ -132,7 +134,7 @@ class World {
     this.addToMap(this.character);
     this.addBackgroundToMap(this.level.enemies);
     this.addBackgroundToMap(this.level.lowEnemies);
-
+    this.addBackgroundToMap(this.throwableObjects);
     this.ctx.translate(-this.camera_X, 0);                    //dann schieben wir den Kameraausschnitt nach rechts
 
     let self = this;        //hier ist "this" unbekannt, daher außerhalb definieren

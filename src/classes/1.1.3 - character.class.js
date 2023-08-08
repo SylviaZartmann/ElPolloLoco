@@ -4,12 +4,13 @@ class Character extends MovableObject {
   height = 350;
   width = 175;
   enemDamage = 50;
-  bodyLeft = 30;
-  bodyTop = 150;
-  bodyRight = 70;
-  bodyBottom = 165;
+  energy = 100;
+  offsetPositionX = 40;
+  offsetPositionY = 175;
+  offsetWidth = 80;
+  offsetHeight = 160;
   currentTime;
-  killedChicken = 0;
+  killedChicken = 2;
   killedEndboss = 0;
   alive = true;
 
@@ -107,6 +108,7 @@ class Character extends MovableObject {
         this.otherDirection = true; 
       } 
       if (this.world.keyboard.UP && !this.isAboveGround() && !this.isDead()) {
+
         this.jump();
       }  
       if (this.isDead()) {
@@ -147,6 +149,8 @@ class Character extends MovableObject {
   resetpositionY() {
     this.positionY = 85;
   }
+
+
 }
 
 function resetLastMove() {

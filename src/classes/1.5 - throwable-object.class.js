@@ -1,6 +1,11 @@
 class ThrowableObject extends MovableObject {
   height = 60;
   width = 60;
+  fallingSpeedY = 18;
+  energy = 1;
+  enemDamage = 10;
+  flying = true;
+  splashed = false;
 
   ROTATING_BOTTLE = [
     "src/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -29,11 +34,27 @@ class ThrowableObject extends MovableObject {
   }
 
   throw() {
-    this.fallingSpeedY = 20;
     this.applyGravity();
+
     setInterval(() => {
-      if (this.otherDirection) this.positionX -= 10;
-      else this.positionX += 10;
-    }, 25);
+      if (this.flying && this.otherDirection) {
+        this.positionX -= 4;
+      } else if (this.flying) {
+        this.positionX += 4;
+      }
+      if (this.flying && this.positionY + this.height >= 400) {
+        this.isDead();
+        this.flying = false;
+      }
+    }, 1000 / 60);
+
+    setInterval(() => {
+      if (this.flying) this.playAnimation(this.ROTATING_BOTTLE);
+      if (!this.flying) {
+        this.playAnimationOnce(this.SPLASH_BOTTLE, this.positionX);
+      }
+    }, 100);
   }
 }
+
+

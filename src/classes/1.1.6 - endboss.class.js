@@ -5,10 +5,10 @@ class Endboss extends MovableObject {
   charDamage = 20;
   speed = 1;
   energy = 100;
-  bodyLeft = 60;
-  bodyTop = 120;
-  bodyRight = 120;
-  bodyBottom = 150;
+  offsetPositionX = 40;
+  offsetPositionY = 75;
+  offsetWidth = 300;
+  offsetHeight = 300;
   alerted = false;
   attacking = false;
   attacked = false;
