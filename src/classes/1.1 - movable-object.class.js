@@ -5,8 +5,12 @@ class MovableObject extends DrawableObject {
   acceleration = 2;     // Beschleunigungswert
   energy = 100;
   lastHit = 0;
-  maxExistence = 719 * 3;
-  minExistence = -615;
+  offsetLeft = 0;
+  offsetTop = 0;
+  offsetRight = 0;
+  offsetBottom = 0;
+  maxExistence = 719 * 4;
+  minExistence = 0;
 
   applyGravity() {
     setInterval(() => {
@@ -25,41 +29,32 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  /**
-   * checks collision between Character and enemies
-   * at first if character and enemies are in default state
-   * second if charcter and enemies changed direction
-   * last if enemies are inside of the character
-   */
   isColliding(mo) {
-    return (
-      (this.offsetX + this.offsetWidth > mo.offsetX &&
-        this.offsetX + this.offsetWidth < mo.offsetX + mo.offsetWidth &&
-        this.offsetY + this.offsetHeight > mo.offsetY)
-      ||
-      (this.offsetX > mo.offsetX &&
-        this.offsetX < mo.offsetX + mo.offsetWidth &&
-        this.offsetY + this.offsetHeight > mo.offsetY)
-      ||
-      (this.offsetX < mo.offsetX &&
-        this.offsetX + this.offsetWidth > mo.offsetX + mo.offsetWidth &&
-        this.offsetY + this.offsetHeight > mo.offsetY))
+    this.hitboxXdefault = this.positionX + this.offsetRight;
+    this.hitboxXchanged = this.positionX + this.offsetLeft;
+    this.hitboxY = this.positionY + this.offsetTop;
+    this.hitboxWidth = this.width - (this.offsetLeft + this.offsetRight);
+    this.hitboxHeight = this.height - this.offsetBottom;
+
+    mo.hitboxXdefault = mo.positionX + mo.offsetRight;
+    mo.hitboxXchanged = mo.positionX + mo.offsetLeft;
+    mo.hitboxY = mo.positionY + mo.offsetTop;
+    mo.hitboxWidth = mo.width - (mo.offsetLeft + mo.offsetRight);
+    mo.hitboxHeight = mo.height - mo.offsetBottom;
+
+    if (this.otherDirection) {
+      //character läuft nach links
+    } else if (mo.otherDirection) {
+      //chicken läuft nach rechts
+    } else if (this.otherDirection &&  mo.otherDirection) {
+      //beide watscheln in die "falsche" Richtung
+    } else {
+      //beide in default
+    }
   }
 
   isCollidingFromAbove(mo) {
-    console.log('checking colision')
-    return (
-      (this.offsetX + this.offsetWidth > mo.offsetX &&
-        this.offsetX + this.offsetWidth < mo.offsetX + mo.offsetWidth &&
-        this.offsetY + this.offsetHeight > mo.offsetY - 50)
-      ||
-      (this.offsetX > mo.offsetX &&
-        this.offsetX < mo.offsetX + mo.offsetWidth &&
-        this.offsetY + this.offsetHeight > mo.offsetY)
-      ||
-      (this.offsetX < mo.offsetX &&
-        this.offsetX + this.offsetWidth > mo.offsetX + mo.offsetWidth &&
-        this.offsetY + this.offsetHeight > mo.offsetY))
+    //
   }
 
 

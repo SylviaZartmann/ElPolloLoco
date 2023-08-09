@@ -5,10 +5,10 @@ class Character extends MovableObject {
   width = 175;
   enemDamage = 50;
   energy = 100;
-  offsetPositionX = 40;
-  offsetPositionY = 175;
-  offsetWidth = 80;
-  offsetHeight = 160;
+  offsetLeft = 35;
+  offsetTop = 175;
+  offsetRight = 55;
+  offsetBottom = 190;
   currentTime;
   killedChicken = 2;
   killedEndboss = 0;
@@ -93,6 +93,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_THROW);
     this.applyGravity();
     this.animate();
+    
   }
 
   animate() {
@@ -149,8 +150,6 @@ class Character extends MovableObject {
   resetpositionY() {
     this.positionY = 85;
   }
-
-
 }
 
 function resetLastMove() {

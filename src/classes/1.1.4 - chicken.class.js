@@ -3,12 +3,15 @@ class Chicken extends MovableObject {
   height = 75;
   width = 75;
   energy = 10;
-  charDamage = 5;
+  charDamage = 1;
   movementRange = 150;
-  offsetPositionX = 5;
-  offsetPositionY = 10;
-  offsetWidth = 60;
-  offsetHeight = 50;
+  offsetLeft = 5;
+  offsetTop = 10;
+  offsetRight = 10;
+  offsetBottom = 25;
+  otherDirection = false;
+  minExistence = 300;
+  maxExistence = 350;
 
   IMAGES_WALKING = [
     "src/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
@@ -18,10 +21,10 @@ class Chicken extends MovableObject {
   
   IMAGES_DEAD = ['src/img/3_enemies_chicken/chicken_normal/2_dead/dead.png'];
 
-  constructor(positionX, movingDirection) {
+  constructor(positionX, otherDirection) {
     super().loadImage(this.IMAGES_WALKING[0]);
-    this.movingDirection = movingDirection;
     this.isPositionX(positionX);
+    this.otherDirection = otherDirection;
     this.loadImages(this.IMAGES_WALKING);               //es werden alle Bilder des chicken in Bewegung in JSON geladen
     this.loadImages(this.IMAGES_DEAD); 
     this.speed = 0.5 + Math.random() * 0.75;
@@ -31,9 +34,6 @@ class Chicken extends MovableObject {
   isPositionX(positionX) {
     if (positionX === 9999) {
       this.findStartPosition();
-      while (this.positionX >= 0 && this.positionX <= 500) {
-        this.findStartPosition();
-    }
     } else {
       this.positionX = positionX;
       this.startPosition = positionX;

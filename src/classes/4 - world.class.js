@@ -64,12 +64,10 @@ class World {
       )
     };
     if (this.character.isAboveGround()) {
-      console.log(this.character.positionY)
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
           if (this.character.isCollidingFromAbove(enemy) && this.character.jumpingHeightY <= 0) {
-            console.log('colision')
             if (enemy instanceof Chicken) { 
               
               this.character.killed(enemy);

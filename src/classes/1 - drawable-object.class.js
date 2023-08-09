@@ -41,14 +41,14 @@ class DrawableObject {
     }
   }
 
-
-
   drawOffset(ctx) {
-    this.offsetX = this.positionX + this.offsetPositionX;
-    this.offsetY = this.positionY + this.offsetPositionY;
+    this.offsetX = this.positionX + this.offsetLeft;
+    this.offsetY = this.positionY + this.offsetTop;
+    this.offsetWidth = this.width - (this.offsetLeft + this.offsetRight);
+    this.offsetHeight = this.height - this.offsetBottom;
+
     if (
       this instanceof Character ||
-      this instanceof Chick ||
       this instanceof Chicken ||
       this instanceof Endboss
     ) {
