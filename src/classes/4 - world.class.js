@@ -26,7 +26,7 @@ class World {
       this.checkCollision();
       this.checkThrowObjects();
       this.checkPositions();
-    }, 200);
+    }, 50);
   }
 
   checkThrowObjects() {
@@ -55,7 +55,10 @@ class World {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
+          this.character.whichDirection(enemy);
+          this.character.defineHitbox(enemy);
           if (this.character.isColliding(enemy)) {
+            console.log(this.healthbar.percentage)
             this.character.hit(enemy);
             this.healthbar.setPercentage(this.character.energy);
           }
@@ -67,9 +70,10 @@ class World {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
-          if (this.character.isCollidingFromAbove(enemy) && this.character.jumpingHeightY <= 0) {
+          this.character.whichDirection(enemy);
+          this.character.defineHitbox(enemy);
+          if (this.character.isCollidingFromAbove(enemy) && this.character.fallingSpeedY <= 0) {
             if (enemy instanceof Chicken) { 
-              
               this.character.killed(enemy);
               this.character.jump();
               this.level.egg.push(new Eggstate(enemy.positionX, new Date()));
@@ -88,11 +92,13 @@ class World {
     let enemyTypes = [this.level.lowEnemies, this.level.endboss];
     enemyTypes.forEach((allEnemies) => {
       allEnemies.forEach((enemy) => {
+        this.character.whichDirection(enemy);
+        this.character.defineHitbox(enemy);
         if (this.character.isInFrontOf(enemy)) {
-          enemy.movingDirection = 'left';
+          enemy.otherDirection = false;
         }
         if (this.character.isBehind(enemy)) {
-          enemy.movingDirection = 'right';
+          enemy.otherDirection = true;
         }
         if (enemy instanceof Endboss) {
           if (this.character.checkDistance(enemy)) {

@@ -3,14 +3,14 @@ class Character extends MovableObject {
   positionY = 85;
   height = 350;
   width = 175;
-  enemDamage = 50;
+  enemDamage = 100;
   energy = 100;
   offsetLeft = 35;
   offsetTop = 175;
   offsetRight = 55;
   offsetBottom = 190;
   currentTime;
-  killedChicken = 2;
+  killedChicken = 0;
   killedEndboss = 0;
   alive = true;
 
@@ -109,9 +109,12 @@ class Character extends MovableObject {
         this.otherDirection = true; 
       } 
       if (this.world.keyboard.UP && !this.isAboveGround() && !this.isDead()) {
-
         this.jump();
       }  
+      if (!this.isAboveGround() && !this.isDead()) {
+        this.resetpositionY();
+      }
+
       if (this.isDead()) {
         this.alive = false;
         setTimeout(() => {
@@ -135,7 +138,7 @@ class Character extends MovableObject {
       } else if (this.world.keyboard.ACTION) {
         this.playAnimation(this.IMAGES_THROW);
       } else if (!this.world.keyboard.ACTION && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
-        this.resetpositionY();
+        
         let currentTime = new Date();
         let passedTime = currentTime - lastMove;
         if (passedTime >= 5000) {

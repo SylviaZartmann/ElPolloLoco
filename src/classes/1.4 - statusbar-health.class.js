@@ -3,6 +3,7 @@ class Healthbar extends DrawableObject  {
   positionY = 0;
   height = 60;
   width = 200;
+  percentage;
 
   IMAGES_HEALTH = [
     "src/img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png",
@@ -13,7 +14,6 @@ class Healthbar extends DrawableObject  {
     "src/img/7_statusbars/1_statusbar/2_statusbar_health/green/100.png",
   ];
 
-  percentage = 100;
 
   constructor() {
     super().loadImage(this.IMAGES_HEALTH[5]); //initialisierung der übergeordneten Objekte

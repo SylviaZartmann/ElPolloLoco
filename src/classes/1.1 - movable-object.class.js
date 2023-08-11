@@ -2,8 +2,7 @@ class MovableObject extends DrawableObject {
   speed;
   otherDirection = false;
   fallingSpeedY = 0;
-  acceleration = 2;     // Beschleunigungswert
-  energy = 100;
+  acceleration = 2; // Beschleunigungswert
   lastHit = 0;
   offsetLeft = 0;
   offsetTop = 0;
@@ -14,7 +13,7 @@ class MovableObject extends DrawableObject {
 
   applyGravity() {
     setInterval(() => {
-      if (this.isAboveGround() && !this.isDead() || this.fallingSpeedY > 0) {
+      if ((this.isAboveGround() && !this.isDead()) || this.fallingSpeedY > 0) {
         this.positionY -= this.fallingSpeedY;
         this.fallingSpeedY -= this.acceleration;
       }
@@ -29,34 +28,47 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  isColliding(mo) {
-    this.hitboxXdefault = this.positionX + this.offsetRight;
-    this.hitboxXchanged = this.positionX + this.offsetLeft;
-    this.hitboxY = this.positionY + this.offsetTop;
-    this.hitboxWidth = this.width - (this.offsetLeft + this.offsetRight);
-    this.hitboxHeight = this.height - this.offsetBottom;
-
-    mo.hitboxXdefault = mo.positionX + mo.offsetRight;
-    mo.hitboxXchanged = mo.positionX + mo.offsetLeft;
-    mo.hitboxY = mo.positionY + mo.offsetTop;
-    mo.hitboxWidth = mo.width - (mo.offsetLeft + mo.offsetRight);
-    mo.hitboxHeight = mo.height - mo.offsetBottom;
-
+  whichDirection(mo) {
     if (this.otherDirection) {
-      //character läuft nach links
+      this.hitboxX = this.positionX + this.offsetRight;
+      mo.hitboxX = mo.positionX + mo.offsetLeft;
     } else if (mo.otherDirection) {
-      //chicken läuft nach rechts
-    } else if (this.otherDirection &&  mo.otherDirection) {
-      //beide watscheln in die "falsche" Richtung
+      this.hitboxX = this.positionX + this.offsetLeft;
+      mo.hitboxX = mo.positionX + mo.offsetRight;
+    } else if (this.otherDirection && mo.otherDirection) {
+      this.hitboxX = this.positionX + this.offsetRight;
+      mo.hitboxX = mo.positionX + mo.offsetRight;
     } else {
-      //beide in default
+      this.hitboxX = this.positionX + this.offsetLeft;
+      mo.hitboxX = mo.positionX + mo.offsetLeft;
     }
   }
 
-  isCollidingFromAbove(mo) {
-    //
+  defineHitbox(mo) {
+    this.hitboxY = this.positionY + this.offsetTop;
+    this.hitboxWidth = this.width - (this.offsetLeft + this.offsetRight);
+    this.hitboxHeight = this.height - this.offsetBottom;
+    mo.hitboxY = mo.positionY + mo.offsetTop;
+    mo.hitboxWidth = mo.width - (mo.offsetLeft + mo.offsetRight);
+    mo.hitboxHeight = mo.height - mo.offsetBottom;
   }
 
+  isColliding(mo) {
+      return (
+        this.hitboxX + this.hitboxWidth > mo.hitboxX &&
+        this.hitboxX < mo.hitboxX + mo.hitboxWidth &&
+        this.hitboxY + this.hitboxHeight > mo.hitboxY &&
+        this.hitboxY < mo.hitboxY + mo.hitboxHeight
+      )
+  }
+
+  isCollidingFromAbove(mo) {
+      return (
+        this.hitboxX + this.hitboxWidth > mo.hitboxX &&
+        this.hitboxX < mo.hitboxX + mo.hitboxWidth &&
+        this.hitboxY + this.hitboxHeight >= mo.hitboxY - 10
+      )
+  }
 
   hit(mo) {
     if (mo.charDamage > 0) {
@@ -64,7 +76,7 @@ class MovableObject extends DrawableObject {
       if (this.energy < 0) {
         this.energy = 0;
       } else {
-        this.lastHit = new Date().getTime();      //Zeitpunkt Speichern, wo verletzt wurde
+        this.lastHit = new Date().getTime(); //Zeitpunkt Speichern, wo verletzt wurde
         resetLastMove();
       }
     }
@@ -74,7 +86,7 @@ class MovableObject extends DrawableObject {
     if (mo instanceof Chicken) this.killedChicken++;
     if (mo instanceof Endboss) this.killedEndboss++;
     mo.energy -= this.enemDamage;
-    if (mo.energy < 0) {
+    if (mo.energy <= 0) {
       mo.energy = 0;
     }
   }
@@ -102,7 +114,7 @@ class MovableObject extends DrawableObject {
   }
 
   playAnimation(images) {
-    let i = this.currentImage % images.length;      // % = Modulo Funktion
+    let i = this.currentImage % images.length; // % = Modulo Funktion
     let path = images[i];
     this.img = this.imageCache[path];
     this.currentImage++;
@@ -115,8 +127,8 @@ class MovableObject extends DrawableObject {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
-          if (i === 4 && this instanceof Eggstate) {
-          this.animationPlayed = true;  
+        if (i === 4 && this instanceof Eggstate) {
+          this.animationPlayed = true;
           setTimeout(() => {
             world.level.lowEnemies.push(new Chick(positionX, new Date()));
           }, 800);
@@ -134,7 +146,9 @@ class MovableObject extends DrawableObject {
       let currentTime = new Date();
       if (currentTime - this.hetchTime >= 20000) {
         this.chickenAdded = true;
-        world.level.enemies.push(new Chicken(this.positionX, this.movingDirection));
+        world.level.enemies.push(
+          new Chicken(this.positionX, this.otherDirection)
+        );
         if (index !== -1) {
           world.level.lowEnemies.splice(index, 1);
         }
@@ -153,22 +167,24 @@ class MovableObject extends DrawableObject {
 
   isInFrontOf(chick) {
     return (
-      chick.positionX - 60 >= this.offsetX &&
-      chick.positionX - 60 >= this.offsetX + this.offsetWidth &&
-      chick.positionX + chick.width - 60 >= this.offsetX &&
-      chick.positionX + chick.width - 60 >= this.offsetX + this.offsetWidth)
+      chick.positionX - 60 >= this.hitboxX &&
+      chick.positionX - 60 >= this.hitboxX + this.hitboxWidth &&
+      chick.positionX + chick.width - 60 >= this.hitboxX &&
+      chick.positionX + chick.width - 60 >= this.hitboxX + this.hitboxWidth
+    );
   }
 
   isBehind(chick) {
     return (
-      chick.positionX + 60 <= this.offsetX &&
-      chick.positionX + 60 <= this.offsetX + this.offsetWidth &&
-      chick.positionX + chick.width + 60 <= this.offsetX &&
-      chick.positionX + chick.width + 60 <= this.offsetX + this.offsetWidth)
+      chick.positionX + 60 <= this.hitboxX &&
+      chick.positionX + 60 <= this.hitboxX + this.hitboxWidth &&
+      chick.positionX + chick.width + 60 <= this.hitboxX &&
+      chick.positionX + chick.width + 60 <= this.hitboxX + this.hitboxWidth
+    );
   }
 
   checkDistance(endboss) {
-    this.distance = endboss.positionX - this.offsetX + this.offsetWidth;
+    this.distance = endboss.positionX - this.hitboxX + this.hitboxWidth;
     return this.distance;
   }
 }

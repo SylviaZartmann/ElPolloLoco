@@ -25,13 +25,11 @@ class Chick extends MovableObject {
   animate() {
     setTimeout(() => {
       setInterval(() => {
-      if (this.movingDirection == 'left') {
+      if (!this.otherDirection) {
         this.moveLeft();
-        this.otherDirection = false;
       }
-      if (this.movingDirection == 'right') {
+      if (this.otherDirection) {
         this.moveRight();
-        this.otherDirection = true;
       }
       this.chickBecomesChicken();
     }, 1000/60);

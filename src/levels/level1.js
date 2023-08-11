@@ -2,7 +2,7 @@ const level1 = new level(
   
   (lowEnemies = []),
 
-  (enemies = [new Chicken(9999, false)]), //
+  (enemies = [new Chicken(9999, true), new Chicken(9999, false), new Chicken(9999, true), new Chicken(9999, false), new Chicken(9999, false)]), //
 
   (endboss = []),
 
