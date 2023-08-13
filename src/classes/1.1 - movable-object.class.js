@@ -10,6 +10,7 @@ class MovableObject extends DrawableObject {
   offsetBottom = 0;
   maxExistence = 719 * 4;
   minExistence = 0;
+  imageOfInterest = false;
 
   applyGravity() {
     setInterval(() => {
@@ -62,17 +63,9 @@ class MovableObject extends DrawableObject {
       )
   }
 
-  isCollidingFromAbove(mo) {
-      return (
-        this.hitboxX + this.hitboxWidth > mo.hitboxX &&
-        this.hitboxX < mo.hitboxX + mo.hitboxWidth &&
-        this.hitboxY + this.hitboxHeight >= mo.hitboxY - 10
-      )
-  }
-
   hit(mo) {
-    if (mo.charDamage > 0) {
-      this.energy -= mo.charDamage;
+    if (mo.Damage > 0) {
+      this.energy -= mo.Damage;
       if (this.energy < 0) {
         this.energy = 0;
       } else {
@@ -82,19 +75,19 @@ class MovableObject extends DrawableObject {
     }
   }
 
-  killed(mo) {
-    if (mo instanceof Chicken) this.killedChicken++;
-    if (mo instanceof Endboss) this.killedEndboss++;
-    mo.energy -= this.enemDamage;
-    if (mo.energy <= 0) {
-      mo.energy = 0;
-    }
-  }
-
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;
     timepassed = timepassed / 1000;
     return timepassed < 1;
+  }
+
+ killed(mo) {
+    if (mo instanceof Chicken) this.killedChicken++;
+    if (mo instanceof Endboss) this.killedEndboss++;
+    mo.energy -= this.Damage;
+    if (mo.energy <= 0) {
+      mo.energy = 0;
+    }
   }
 
   isDead() {
@@ -120,28 +113,16 @@ class MovableObject extends DrawableObject {
     this.currentImage++;
   }
 
-  playAnimationOnce(images, positionX) {
-    if (!this.animationPlayed) {
-      this.currentImage = 0;
-      for (let i = 0; i < images.length; i++) {
-        let path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
-        if (i === 4 && this instanceof Eggstate) {
-          this.animationPlayed = true;
-          setTimeout(() => {
-            world.level.lowEnemies.push(new Chick(positionX, new Date()));
-          }, 800);
-        } else if (i === 5 && this instanceof ThrowableObject) {
-          this.animationPlayed = true;
-          this.splashed = true;
-        }
-      }
+  eggBecomesChick(positionX) {
+    if (this.imageOfInterest) {
+      this.chickAdded = true;
+      setTimeout(() => {
+        world.level.lowEnemies.push(new Chick(positionX, new Date()));
+      }, 800);
     }
   }
 
   chickBecomesChicken() {
-    const index = world.level.lowEnemies.indexOf(this);
     if (!this.chickenAdded) {
       let currentTime = new Date();
       if (currentTime - this.hetchTime >= 20000) {
@@ -149,16 +130,14 @@ class MovableObject extends DrawableObject {
         world.level.enemies.push(
           new Chicken(this.positionX, this.otherDirection)
         );
-        if (index !== -1) {
-          world.level.lowEnemies.splice(index, 1);
-        }
+        this.removeInstance(world.level.lowEnemies);
       }
     }
   }
 
   helloEndboss() {
     if (!this.endbossAdded) {
-      if (this.killedChicken >= 20) {
+      if (this.killedChicken === 20) {
         this.endbossAdded = true;
         world.level.endboss.push(new Endboss());
       }
@@ -167,24 +146,39 @@ class MovableObject extends DrawableObject {
 
   isInFrontOf(chick) {
     return (
-      chick.positionX - 60 >= this.hitboxX &&
-      chick.positionX - 60 >= this.hitboxX + this.hitboxWidth &&
-      chick.positionX + chick.width - 60 >= this.hitboxX &&
-      chick.positionX + chick.width - 60 >= this.hitboxX + this.hitboxWidth
+      chick.positionX - 40 >= this.hitboxX &&
+      chick.positionX - 40 >= this.hitboxX + this.hitboxWidth &&
+      chick.positionX + chick.width - 40 >= this.hitboxX &&
+      chick.positionX + chick.width - 40 >= this.hitboxX + this.hitboxWidth
     );
   }
 
   isBehind(chick) {
     return (
-      chick.positionX + 60 <= this.hitboxX &&
-      chick.positionX + 60 <= this.hitboxX + this.hitboxWidth &&
-      chick.positionX + chick.width + 60 <= this.hitboxX &&
-      chick.positionX + chick.width + 60 <= this.hitboxX + this.hitboxWidth
+      chick.positionX + 40 <= this.hitboxX &&
+      chick.positionX + 40 <= this.hitboxX + this.hitboxWidth &&
+      chick.positionX + chick.width + 40 <= this.hitboxX &&
+      chick.positionX + chick.width + 40 <= this.hitboxX + this.hitboxWidth
     );
   }
 
   checkDistance(endboss) {
     this.distance = endboss.positionX - this.hitboxX + this.hitboxWidth;
     return this.distance;
+  }
+
+  gettingPictureOfInterest(picture){
+    if (this.img.currentSrc.includes(picture)) {
+      return this.imageOfInterest = true;
+    } else {
+      return this.imageOfInterest = false;
+    }
+  }
+
+  removeInstance(whatToSplice) {
+    let index = whatToSplice.indexOf(this);
+    if (index !== -1) {
+      whatToSplice.splice(index, 1);
+    }
   }
 }

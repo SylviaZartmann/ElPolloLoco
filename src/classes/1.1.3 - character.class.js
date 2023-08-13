@@ -3,14 +3,14 @@ class Character extends MovableObject {
   positionY = 85;
   height = 350;
   width = 175;
-  enemDamage = 100;
+  Damage = 100;
   energy = 100;
   offsetLeft = 35;
   offsetTop = 175;
   offsetRight = 55;
   offsetBottom = 190;
   currentTime;
-  killedChicken = 0;
+  killedChicken = 20;
   killedEndboss = 0;
   alive = true;
 
@@ -159,7 +159,5 @@ function resetLastMove() {
   lastMove = new Date();
 }
 
-document.addEventListener ("keyup", function() {
-  resetLastMove();
-});
+document.addEventListener ("keyup", resetLastMove());
 

@@ -3,7 +3,7 @@ class Chicken extends MovableObject {
   height = 75;
   width = 75;
   energy = 100;
-  charDamage = 1;
+  Damage = 1;
   movementRange = 250;
   offsetLeft = 5;
   offsetTop = 10;
@@ -26,7 +26,7 @@ class Chicken extends MovableObject {
     this.otherDirection = otherDirection;
     this.loadImages(this.IMAGES_WALKING);               //es werden alle Bilder des chicken in Bewegung in JSON geladen
     this.loadImages(this.IMAGES_DEAD); 
-    this.speed = 0.5 + Math.random() * 0.75;
+    this.speed = 0.25 + Math.random() * 1.25;
     this.animate();
   }
 
@@ -60,11 +60,12 @@ class Chicken extends MovableObject {
         }
       }
       if (this.isDead()) {
-        this.charDamage = 0;
+        this.Damage = 0;
         this.offsetTop = 500;
         setTimeout(() => {
-          this.positionY += 5;
-        }, 2000);
+          this.removeInstance(world.level.enemies);
+        }, 3000);
+        
       }
     }, 1000/60);
     setInterval(() => {

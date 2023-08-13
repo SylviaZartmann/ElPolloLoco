@@ -24,33 +24,13 @@ class World {
   run() {
     setInterval(() => {
       this.checkCollision();
-      this.checkThrowObjects();
       this.checkPositions();
+      this.checkThrowObjects();
+      this.checkHitByBottle();
     }, 50);
   }
 
-  checkThrowObjects() {
-    if (this.keyboard.ACTION) {
-      if (!this.character.otherDirection) {
-        this.throwingLeftOrRight(+100, +200);
-      } else {
-        this.throwingLeftOrRight(+20, +200);
-      }
-      
-    }
-  }
-
-  throwingLeftOrRight(x, y) {
-    let bottle = new ThrowableObject(
-      this.character.positionX + x,
-      this.character.positionY + y,
-      this.character.otherDirection,
-
-    );
-    this.throwableObjects.push(bottle);
-  }
-
-  checkCollision() {
+    checkCollision() {
     if (this.character.positionY === 85) {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
@@ -58,7 +38,6 @@ class World {
           this.character.whichDirection(enemy);
           this.character.defineHitbox(enemy);
           if (this.character.isColliding(enemy)) {
-            console.log(this.healthbar.percentage)
             this.character.hit(enemy);
             this.healthbar.setPercentage(this.character.energy);
           }
@@ -72,14 +51,14 @@ class World {
         allEnemies.forEach((enemy) => {
           this.character.whichDirection(enemy);
           this.character.defineHitbox(enemy);
-          if (this.character.isCollidingFromAbove(enemy) && this.character.fallingSpeedY <= 0) {
-            if (enemy instanceof Chicken) { 
+          if (this.character.isColliding(enemy) && this.character.fallingSpeedY <= 0) {
+            if (enemy instanceof Chicken && !this.character.isDead()) {
               this.character.killed(enemy);
               this.character.jump();
               this.level.egg.push(new Eggstate(enemy.positionX, new Date()));
-          } else {
-            this.character.hit(enemy);
-            this.healthbar.setPercentage(this.character.energy);
+            } else {
+              this.character.hit(enemy);
+              this.healthbar.setPercentage(this.character.energy);
             }
           }
         });
@@ -87,7 +66,6 @@ class World {
       );
     }
   }
-
   checkPositions() {
     let enemyTypes = [this.level.lowEnemies, this.level.endboss];
     enemyTypes.forEach((allEnemies) => {
@@ -104,42 +82,70 @@ class World {
           if (this.character.checkDistance(enemy)) {
             if (this.character.distance <= 150) {
               enemy.alerted = false;
-              enemy.attacking = true;    
+              enemy.attacking = true;
             } else if (this.character.distance <= 300 && this.character.distance >= 150) {
               enemy.alerted = true;
-              enemy.attacking = false; 
+              enemy.attacking = false;
             } else {
               enemy.alerted = false;
               enemy.attacking = false;
-            } 
+            }
           }
         }
       });
     });
   }
 
+  checkThrowObjects() {
+    if (this.keyboard.ACTION) {
+      if (!this.character.otherDirection) {
+        this.throwingLeftOrRight(+100, +200);
+      } else {
+        this.throwingLeftOrRight(+20, +200);
+      }
+    }
+  }
+
+  throwingLeftOrRight(x, y) {
+    this.throwableObjects.push(new ThrowableObject(
+      this.character.positionX + x,
+      this.character.positionY + y,
+      this.character.otherDirection,
+    ));
+  }
+
+  checkHitByBottle() {
+    this.level.endboss.forEach((endboss) => {
+      this.throwableObjects.forEach((bottle) => {
+        if (endboss.isColliding(bottle)) {
+          console.log('hit');
+          endboss.hit(bottle);
+        };
+      })
+    });
+  }
+
   draw() {
-    //Reihenfolge bestimmt Darstellungsreihenfolge (Darstellungsebene())
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.ctx.translate(this.camera_X, 0);                     //wir schieben den Kameraausschnitt nach links
-    this.addBackgroundToMap(this.level.backgroundObject);     //dann malen wir alle objekte
+    this.ctx.translate(this.camera_X, 0);
+    this.addBackgroundToMap(this.level.backgroundObject);
     this.addBackgroundToMap(this.level.clouds);
-    
-    this.addBackgroundToMap(this.level.egg);
-    this.ctx.translate(-this.camera_X, 0);                   //Kamera wird zurückgesetzt
 
-    this.addToMap(this.healthbar);                            //statusbar wird mit dem Bild geführt
+    this.addBackgroundToMap(this.level.egg);
+    this.ctx.translate(-this.camera_X, 0);
+
+    this.addToMap(this.healthbar);
     this.addToMap(this.bottlebar);
     this.addToMap(this.coinbar);
 
-    this.ctx.translate(this.camera_X, 0);                     //Kamera wird vorgesetzt
+    this.ctx.translate(this.camera_X, 0);
     this.addBackgroundToMap(this.level.endboss);
     this.addToMap(this.character);
     this.addBackgroundToMap(this.level.enemies);
     this.addBackgroundToMap(this.level.lowEnemies);
     this.addBackgroundToMap(this.throwableObjects);
-    this.ctx.translate(-this.camera_X, 0);                    //dann schieben wir den Kameraausschnitt nach rechts
+    this.ctx.translate(-this.camera_X, 0);
 
     let self = this;        //hier ist "this" unbekannt, daher außerhalb definieren
     requestAnimationFrame(() => {

@@ -20,10 +20,10 @@ class Eggstate extends MovableObject {
     "src/img/10_egg/egg_crack04.png"
   ]
 
-  constructor(positionX, existance) {
+  constructor(positionX, eggsistance) {
     super().loadImage(this.IMAGES_EGGSTATE_SHAKING[0]);
     this.positionX = positionX;
-    this.existance = existance;
+    this.existance = eggsistance;
     this.loadImages(this.IMAGES_EGGSTATE_SHAKING);
     this.loadImages(this.IMAGES_EGGSTATE_CRACKING);
     this.animate();
@@ -35,9 +35,13 @@ class Eggstate extends MovableObject {
       let elapsedTime = currentTime - this.existance;
       if (elapsedTime < 5000) {
         this.playAnimation(this.IMAGES_EGGSTATE_SHAKING);
-      } else {
-        this.playAnimationOnce(this.IMAGES_EGGSTATE_CRACKING, this.positionX);
+      } else if (!this.chickAdded) {
+        this.playAnimation(this.IMAGES_EGGSTATE_CRACKING);
+        this.gettingPictureOfInterest('egg_crack04');
       }
+      if (!this.chickAdded) {
+          this.eggBecomesChick(this.positionX);
+        }
     }, 250);
     
   }

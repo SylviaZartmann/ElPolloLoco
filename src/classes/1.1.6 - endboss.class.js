@@ -2,7 +2,7 @@ class Endboss extends MovableObject {
   positionY = 50;
   height = 400;
   width = 400;
-  charDamage = 20;
+  Damage = 20;
   speed = 1;
   energy = 100;
   offsetLeft = 30;
@@ -13,7 +13,6 @@ class Endboss extends MovableObject {
   attacking = false;
   attacked = false;
   jumpingwidth = 20;
-  movingDirection = 'left';
 
   IMAGES_WALKING = [
     "src/img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -66,17 +65,17 @@ class Endboss extends MovableObject {
   animate() {
     setInterval(() => {
       if (!this.alerted && !this.attacking && !this.isDead()) {
-        this.charDamage = 30;
+        this.Damage = 20;
         this.moveLeft();
 
       }
       if (this.attacking && this.imageOfInterest && !this.isDead()) {
-        this.charDamage = 35;
+        this.Damage = 35;
         this.positionX = this.positionX - this.jumpingwidth;
       }
 
       if (this.isDead()) {
-        this.charDamage = 0;
+        this.Damage = 0;
       }
     }, 1000/60);
     setInterval(() => {
@@ -88,16 +87,13 @@ class Endboss extends MovableObject {
       }
       if (this.attacking && !this.alerted) {
         this.playAnimation(this.IMAGES_ATTACKING);
-        this.currentAttackingPicture();
+        this.gettingPictureOfInterest('G18');
         }
+      if (this.isDead()) {
+        this.playAnimation(this.IMAGES_DEAD);
+      }
     }, 175);
   }
 
-  currentAttackingPicture(){
-    if (this.img.currentSrc.includes('G18')) {
-      return this.imageOfInterest = true;
-    } else {
-      return this.imageOfInterest = false;
-    }
-  }
+
 }

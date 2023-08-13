@@ -2,10 +2,13 @@ class ThrowableObject extends MovableObject {
   height = 60;
   width = 60;
   fallingSpeedY = 18;
-  energy = 1;
-  enemDamage = 10;
+  Damage = 10;
   flying = true;
   splashed = false;
+  offsetLeft = 0;
+  offsetTop = 0;
+  offsetRight = 0;
+  offsetBottom = 0;
 
   ROTATING_BOTTLE = [
     "src/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -43,7 +46,6 @@ class ThrowableObject extends MovableObject {
         this.positionX += 4;
       }
       if (this.flying && this.positionY + this.height >= 400) {
-        this.isDead();
         this.flying = false;
       }
     }, 1000 / 60);
@@ -51,7 +53,11 @@ class ThrowableObject extends MovableObject {
     setInterval(() => {
       if (this.flying) this.playAnimation(this.ROTATING_BOTTLE);
       if (!this.flying) {
-        this.playAnimationOnce(this.SPLASH_BOTTLE, this.positionX);
+        this.playAnimation(this.SPLASH_BOTTLE);
+        this.gettingPictureOfInterest('6_bottle_splash');
+        if (this.imageOfInterest) {
+        this.removeInstance(world.throwableObjects);
+        }
       }
     }, 100);
   }
