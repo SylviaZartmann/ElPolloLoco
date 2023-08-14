@@ -38,4 +38,17 @@ class Chick extends MovableObject {
     }, 150);
     }, 1000);
   }
+  
+  chickBecomesChicken() {
+    if (!this.chickenAdded) {
+      let currentTime = new Date();
+      if (currentTime - this.hetchTime >= 20000) {
+        this.chickenAdded = true;
+        world.level.enemies.push(
+          new Chicken(this.positionX, this.otherDirection)
+        );
+        this.removeInstance(world.level.lowEnemies);
+      }
+    }
+  }
 }

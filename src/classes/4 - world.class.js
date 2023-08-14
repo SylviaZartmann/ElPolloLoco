@@ -117,8 +117,11 @@ class World {
   checkHitByBottle() {
     this.level.endboss.forEach((endboss) => {
       this.throwableObjects.forEach((bottle) => {
-        if (endboss.isColliding(bottle)) {
-          console.log('hit');
+        bottle.whichDirection(endboss);
+        bottle.defineHitbox(endboss);
+        bottle.checkDistance(endboss);
+        if (bottle.distance < -30 && bottle.hitboxY > endboss.hitboxY) {
+          bottle.flying = false;
           endboss.hit(bottle);
         };
       })

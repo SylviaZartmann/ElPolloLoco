@@ -45,4 +45,12 @@ class Eggstate extends MovableObject {
     }, 250);
     
   }
+  eggBecomesChick(positionX) {
+    if (this.imageOfInterest) {
+      this.chickAdded = true;
+      setTimeout(() => {
+        world.level.lowEnemies.push(new Chick(positionX, new Date()));
+      }, 800);
+    }
+  }
 }

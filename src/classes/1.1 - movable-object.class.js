@@ -113,28 +113,6 @@ class MovableObject extends DrawableObject {
     this.currentImage++;
   }
 
-  eggBecomesChick(positionX) {
-    if (this.imageOfInterest) {
-      this.chickAdded = true;
-      setTimeout(() => {
-        world.level.lowEnemies.push(new Chick(positionX, new Date()));
-      }, 800);
-    }
-  }
-
-  chickBecomesChicken() {
-    if (!this.chickenAdded) {
-      let currentTime = new Date();
-      if (currentTime - this.hetchTime >= 20000) {
-        this.chickenAdded = true;
-        world.level.enemies.push(
-          new Chicken(this.positionX, this.otherDirection)
-        );
-        this.removeInstance(world.level.lowEnemies);
-      }
-    }
-  }
-
   helloEndboss() {
     if (!this.endbossAdded) {
       if (this.killedChicken === 20) {
@@ -163,7 +141,7 @@ class MovableObject extends DrawableObject {
   }
 
   checkDistance(endboss) {
-    this.distance = endboss.positionX - this.hitboxX + this.hitboxWidth;
+    this.distance = endboss.hitboxX - this.hitboxX + this.hitboxWidth;
     return this.distance;
   }
 

@@ -159,5 +159,7 @@ function resetLastMove() {
   lastMove = new Date();
 }
 
-document.addEventListener ("keyup", resetLastMove());
+document.addEventListener ("keyup", function() {
+  resetLastMove();
+});
 
