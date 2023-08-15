@@ -159,4 +159,14 @@ class MovableObject extends DrawableObject {
       whatToSplice.splice(index, 1);
     }
   }
+
+  findStartPosition() {
+      this.positionX = this.minExistence + Math.random() * this.maxExistence;
+      this.startPosition = this.positionX;
+      return this.positionX;
+  }
+
+  getRandomBoolean() {
+    return Math.random() < 0.5;
+  }
 }

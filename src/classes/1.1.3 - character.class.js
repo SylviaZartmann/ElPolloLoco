@@ -10,9 +10,11 @@ class Character extends MovableObject {
   offsetRight = 55;
   offsetBottom = 190;
   currentTime;
-  killedChicken = 20;
+  killedChicken = 0;
   killedEndboss = 0;
   alive = true;
+  collectedCoins = 0;
+  collectedBottles = 0;
 
   world;
   //walking_sound = new Audio('src/audio/running.mp3');

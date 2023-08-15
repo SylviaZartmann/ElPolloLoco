@@ -3,6 +3,7 @@ class Coinbar extends DrawableObject {
     positionY = 100
     height  = 60;
     width = 200;
+    maxCoins = 15;
 
     IMAGES_COIN = [
       "src/img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png",
@@ -16,13 +17,13 @@ class Coinbar extends DrawableObject {
   percentage = 0;
 
   constructor() {
-    super().loadImage(this.IMAGES_COIN[0]); //initialisierung der übergeordneten Objekte
+    super().loadImage(this.IMAGES_COIN[0]);
     this.loadImages(this.IMAGES_COIN);
     this.setPercentage(0);
   }
 
-  setPercentage(percentage) {
-    this.percentage = percentage; //aus dem Stapel Bilder muss Index zwischen 0 und 5 ermitteln
+  setPercentage(collectedCoin) {
+    this.percentage = collectedCoin / this.maxCoins * 100;
     let imagePath = this.IMAGES_COIN[this.resolveImageIndex()];
     this.img = this.imageCache[imagePath];
     }   

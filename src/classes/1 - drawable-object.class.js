@@ -25,38 +25,4 @@ class DrawableObject {
       this.height,
     );
   }
-
-  drawFrame(ctx) {
-    if (
-      this instanceof Character ||
-      this instanceof Chick ||
-      this instanceof Chicken ||
-      this instanceof Endboss
-    ) {
-      ctx.beginPath();
-      ctx.lineWidth = "5";
-      ctx.strokeStyle = "red";
-      ctx.rect(this.positionX, this.positionY, this.width, this.height);
-      ctx.stroke();
-    }
-  }
-
-  drawOffset(ctx) {
-    this.offsetX = this.positionX + this.offsetLeft;
-    this.offsetY = this.positionY + this.offsetTop;
-    this.offsetWidth = this.width - (this.offsetLeft + this.offsetRight);
-    this.offsetHeight = this.height - this.offsetBottom;
-
-    if (
-      this instanceof Character ||
-      this instanceof Chicken ||
-      this instanceof Endboss
-    ) {
-      ctx.beginPath();
-      ctx.lineWidth = "5";
-      ctx.strokeStyle = "green";
-      ctx.rect(this.offsetX, this.offsetY, this.offsetWidth, this.offsetHeight);
-      ctx.stroke();
-    }
-  }
 }

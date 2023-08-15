@@ -38,12 +38,7 @@ class Chicken extends MovableObject {
       this.startPosition = positionX;
     }
   }
-
-  findStartPosition() {
-      this.positionX = this.minExistence + Math.random() * this.maxExistence;
-      this.startPosition = this.positionX;
-  }
-
+  
   animate() {
     setInterval(() => {
       if (!this.otherDirection && !this.isDead()) {

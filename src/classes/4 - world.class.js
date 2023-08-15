@@ -65,6 +65,27 @@ class World {
       }
       );
     }
+    if (this.character) {
+      let collectableItems = [this.level.coin, this.level.bottle];
+      collectableItems.forEach((allItems) => {
+        allItems.forEach((item) => {
+          this.character.whichDirection(item);
+          this.character.defineHitbox(item);
+          if (this.character.isColliding(item)) {
+            if (item instanceof Coin) {
+              item.removeInstance(this.level.coin);
+              this.character.collectedCoins ++;
+              this.coinbar.setPercentage(this.character.collectedCoins);
+            } else{
+              item.removeInstance(this.level.bottle);
+              this.character.collectedBottles ++;
+              this.bottlebar.setPercentage(this.character.collectedBottles);
+            }
+          }
+        });
+      }
+      )
+    };
   }
   checkPositions() {
     let enemyTypes = [this.level.lowEnemies, this.level.endboss];
@@ -107,11 +128,15 @@ class World {
   }
 
   throwingLeftOrRight(x, y) {
-    this.throwableObjects.push(new ThrowableObject(
-      this.character.positionX + x,
-      this.character.positionY + y,
-      this.character.otherDirection,
-    ));
+    if (this.character.collectedBottles > 0) {
+      this.throwableObjects.push(new ThrowableObject(
+        this.character.positionX + x,
+        this.character.positionY + y,
+        this.character.otherDirection,
+      ));
+      this.character.collectedBottles --;
+      this.bottlebar.setPercentage(this.character.collectedBottles);
+    }
   }
 
   checkHitByBottle() {
@@ -134,8 +159,8 @@ class World {
     this.ctx.translate(this.camera_X, 0);
     this.addBackgroundToMap(this.level.backgroundObject);
     this.addBackgroundToMap(this.level.clouds);
-
     this.addBackgroundToMap(this.level.egg);
+    this.addBackgroundToMap(this.level.coin);
     this.ctx.translate(-this.camera_X, 0);
 
     this.addToMap(this.healthbar);
@@ -148,6 +173,7 @@ class World {
     this.addBackgroundToMap(this.level.enemies);
     this.addBackgroundToMap(this.level.lowEnemies);
     this.addBackgroundToMap(this.throwableObjects);
+    this.addBackgroundToMap(this.level.bottle);
     this.ctx.translate(-this.camera_X, 0);
 
     let self = this;        //hier ist "this" unbekannt, daher außerhalb definieren
@@ -168,8 +194,6 @@ class World {
     }
 
     mo.draw(this.ctx);
-    mo.drawFrame(this.ctx);
-    mo.drawOffset(this.ctx)
 
     if (mo.otherDirection) {
       this.flipImageBack(mo);

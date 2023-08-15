@@ -3,6 +3,7 @@ class Bottlebar extends DrawableObject  {
     positionY = 50
     height  = 60;
     width = 200;
+    maxBottles = 10;
   
     IMAGES_BOTTLE = [
         "src/img/7_statusbars/1_statusbar/3_statusbar_bottle/green/0.png",
@@ -21,15 +22,15 @@ class Bottlebar extends DrawableObject  {
     this.setPercentage(0);
   }
 
-  setPercentage(percentage) {
-    this.percentage = percentage; //aus dem Stapel Bilder muss Index zwischen 0 und 5 ermitteln
+  setPercentage(collectedBottle) {
+    this.percentage = collectedBottle / this.maxBottles * 100;   
     let imagePath = this.IMAGES_BOTTLE[this.resolveImageIndex()];
     this.img = this.imageCache[imagePath];
     }   
 
     resolveImageIndex() {
       if (this.percentage == 100) {
-        return 5; //Bildindex, der ausgegeben wird
+        return 5;
       } else if (this.percentage > 70) {
         return 4;
       } else if (this.percentage > 50) {

@@ -2,7 +2,7 @@ const level1 = new level(
   
   (lowEnemies = []),
 
-  (enemies = []), //new Chicken(9999, true), new Chicken(9999, false), new Chicken(9999, true), new Chicken(9999, false), new Chicken(9999, false)
+  (enemies = [new Chicken(9999), new Chicken(9999), new Chicken(9999), new Chicken(9999), new Chicken(9999)]),
 
   (endboss = []),
 
@@ -38,5 +38,8 @@ const level1 = new level(
     new BackgroundObject("src/img/5_background/layers/1_first_layer/1.png", 719 * 4),
   ]),
   
-  (egg = []), //new Eggstate(350, new Date())
+  (egg = [new Eggstate(350, new Date())]), 
+
+  (coin = [new Coin(380), new Coin(440), new Coin(500), new Coin(800), new Coin(860), new Coin(920), new Coin(1120), new Coin(1650), new Coin(1710), new Coin(1770), new Coin(2000), new Coin(2060), new Coin(2400), new Coin(2460), new Coin(2520)]), 
+  (bottle = [new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle(), new Bottle()]), 
 );
