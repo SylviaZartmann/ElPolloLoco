@@ -8,6 +8,7 @@ body {
   height: 100vh;
   width: 100%;
   font-family: "La Tequila", sans-serif;
+  margin: 0;
 }
 
 h1 {
@@ -17,6 +18,7 @@ h1 {
   margin-top: -70px;
   text-shadow: 5px 5px 10px #220D0A;
   z-index: 1;
+  text-align: center;
 }
 
 canvas {
@@ -24,16 +26,173 @@ canvas {
   display: block;
   box-shadow: 0 0 50px 30px #FED961;
   border-radius: 10px;
+  position: relative;
 }
 
 @media only screen and (max-width: 720px) {
-  canvas {
+  canvas, .overlay, .background, img {
     width: 100%;
   }
 }
 
-@media only screen and (max-height: 480px) {
-  canvas {
-    width: 100vh;
+@media only screen and (max-width: 740px) {
+
+.rotateDevice {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
   }
+}
+
+@media only screen and (min-width: 730px) {
+.rotateDevice {
+    display: none;
+  }
+}
+
+@media only screen and (max-height: 480px) {
+  canvas, .overlay, .background, img  {
+    height: 100vh;
+  }
+}
+
+.overlay {
+  position: absolute;
+  width: 720px;
+  height: 480px;
+  border-radius: 10px;
+  color: #A0220A;  
+  text-shadow: 2px 2px 5px #220D0A;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.overlay img {
+  position: absolute;
+  width: 720px;
+  height: 480px;
+  border-radius: 10px;
+  z-index: 1;
+}
+
+.background {
+  position: absolute;
+  background-color: #FED961;
+  opacity: 0.7;
+  width: 720px;
+  height: 480px;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+.endScreen {
+  /**display: flex;*/
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 3;
+}
+
+.controls {
+  /**display: none;*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 3;
+}
+
+.controls h2 {
+  font-size: 30px;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+  width: fit-content;
+  gap: 30px;
+}
+
+h2 {
+  font-size: 40px;
+  text-shadow: 5px 5px 10px #220D0A;
+  text-align: center;
+}
+
+.button {
+  margin-top: 20px;
+  background-color: #EF9822;
+  height: 70px;
+  width: 220px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 20px 2px #220D0A;
+}
+
+.button:hover {
+  background-color: #A0220A;
+  box-shadow: 3px 3px 20px 2px #220D0A;
+  cursor: pointer;
+  color:#EF9822;
+}
+
+.keyboardKeys {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.key {
+  background-color: #EF9822;
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 10px 2px #220D0A;
+  margin: 5px;
+  font-size: 12px;
+  text-shadow: none;
+}
+
+.secondRow {
+display:flex;
+gap: 20px;
+}
+
+.secondRow p {
+  font-size: 12px;
+  }
+  
+.secondRow img {
+  width: 18px;
+  height: 18px;
+  filter: invert(14%) sepia(100%) saturate(2789%) hue-rotate(2deg) brightness(93%) contrast(93%);
+}
+
+
+
+.rotateDevice {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 4;
+}
+.rotateDevice h2 {
+  filter: invert(80%); 
+}
+
+.rotateDevice img {
+  width: 250px;
+  height: auto;
+  filter: invert(80%); 
 }

@@ -9,6 +9,9 @@ class World {
   ctx;
   keyboard;
   camera_X = 0;
+  bottleTimer;
+  lastBottle;
+  wantedTime = 5000;
 
   throwableObjects = [];
 
@@ -19,15 +22,37 @@ class World {
     this.draw();
     this.setWorld();
     this.run();
+    this.runSecondInterval();
+    this.setBottleTimer();
+    this.respawnBottles();
   }
 
   run() {
     setInterval(() => {
       this.checkCollision();
       this.checkPositions();
-      this.checkThrowObjects();
       this.checkHitByBottle();
     }, 50);
+  }
+
+  runSecondInterval() {
+    setInterval(() => {
+      this.checkThrowObjects();
+      this.respawnBottles();
+    }, 200);
+  }
+
+  setBottleTimer() {
+    this.bottleTimer = new Date();
+  }
+
+  respawnBottles() {
+    this.bottleRespawn = new Date();
+    this.lastBottle = this.bottleTimer - this.bottleRespawn;
+    if (this.lastBottle === this.wantedTime) {
+      this.wantedTime += 5000;
+      this.level.bottle.push(new Bottle());
+    }
   }
 
     checkCollision() {
