@@ -12,6 +12,7 @@ class World {
   bottleTimer;
   lastBottle;
   wantedTime = 5000;
+  existing = false;
 
   throwableObjects = [];
 
@@ -23,8 +24,6 @@ class World {
     this.setWorld();
     this.run();
     this.runSecondInterval();
-    this.setBottleTimer();
-    this.respawnBottles();
   }
 
   run() {
@@ -32,30 +31,17 @@ class World {
       this.checkCollision();
       this.checkPositions();
       this.checkHitByBottle();
+      this.stopGame();
     }, 50);
   }
 
   runSecondInterval() {
     setInterval(() => {
       this.checkThrowObjects();
-      this.respawnBottles();
     }, 200);
   }
 
-  setBottleTimer() {
-    this.bottleTimer = new Date();
-  }
-
-  respawnBottles() {
-    this.bottleRespawn = new Date();
-    this.lastBottle = this.bottleTimer - this.bottleRespawn;
-    if (this.lastBottle === this.wantedTime) {
-      this.wantedTime += 5000;
-      this.level.bottle.push(new Bottle());
-    }
-  }
-
-    checkCollision() {
+  checkCollision() {
     if (this.character.positionY === 85) {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
@@ -67,16 +53,18 @@ class World {
             this.healthbar.setPercentage(this.character.energy);
           }
         });
-      }
-      )
-    };
+      });
+    }
     if (this.character.isAboveGround()) {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
           this.character.whichDirection(enemy);
           this.character.defineHitbox(enemy);
-          if (this.character.isColliding(enemy) && this.character.fallingSpeedY <= 0) {
+          if (
+            this.character.isColliding(enemy) &&
+            this.character.fallingSpeedY <= 0
+          ) {
             if (enemy instanceof Chicken && !this.character.isDead()) {
               this.character.killed(enemy);
               this.character.jump();
@@ -87,8 +75,7 @@ class World {
             }
           }
         });
-      }
-      );
+      });
     }
     if (this.character) {
       let collectableItems = [this.level.coin, this.level.bottle];
@@ -99,18 +86,17 @@ class World {
           if (this.character.isColliding(item)) {
             if (item instanceof Coin) {
               item.removeInstance(this.level.coin);
-              this.character.collectedCoins ++;
+              this.character.collectedCoins++;
               this.coinbar.setPercentage(this.character.collectedCoins);
-            } else{
+            } else {
               item.removeInstance(this.level.bottle);
-              this.character.collectedBottles ++;
+              this.character.collectedBottles++;
               this.bottlebar.setPercentage(this.character.collectedBottles);
             }
           }
         });
-      }
-      )
-    };
+      });
+    }
   }
   checkPositions() {
     let enemyTypes = [this.level.lowEnemies, this.level.endboss];
@@ -129,7 +115,10 @@ class World {
             if (this.character.distance <= 150) {
               enemy.alerted = false;
               enemy.attacking = true;
-            } else if (this.character.distance <= 300 && this.character.distance >= 150) {
+            } else if (
+              this.character.distance <= 300 &&
+              this.character.distance >= 150
+            ) {
               enemy.alerted = true;
               enemy.attacking = false;
             } else {
@@ -154,12 +143,14 @@ class World {
 
   throwingLeftOrRight(x, y) {
     if (this.character.collectedBottles > 0) {
-      this.throwableObjects.push(new ThrowableObject(
-        this.character.positionX + x,
-        this.character.positionY + y,
-        this.character.otherDirection,
-      ));
-      this.character.collectedBottles --;
+      this.throwableObjects.push(
+        new ThrowableObject(
+          this.character.positionX + x,
+          this.character.positionY + y,
+          this.character.otherDirection
+        )
+      );
+      this.character.collectedBottles--;
       this.bottlebar.setPercentage(this.character.collectedBottles);
     }
   }
@@ -173,10 +164,36 @@ class World {
         if (bottle.distance < -30 && bottle.hitboxY > endboss.hitboxY) {
           bottle.flying = false;
           endboss.hit(bottle);
-        };
-      })
+        }
+      });
     });
   }
+
+  stopGame() {
+    let endboss = this.level.endboss;
+    endboss.forEach((endboss) => {
+      if (endboss.energy <= 0) {
+      let enemyTypes = [this.level.lowEnemies, this.level.enemies, this.level.egg];
+      enemyTypes.forEach((allEnemies) => {
+        allEnemies.forEach((enemy) => {
+          enemy.removeInstance(allEnemies);
+        })
+      })
+    }
+    if (this.character.isDead()) {
+      let enemyTypes = [this.level.lowEnemies, this.level.enemies, this.level.egg];
+      enemyTypes.forEach((allEnemies) => {
+        allEnemies.forEach((enemy) => {
+          enemy.removeInstance(allEnemies);
+        })
+      })
+    }
+    }
+    
+    )
+    
+  }
+
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -201,7 +218,7 @@ class World {
     this.addBackgroundToMap(this.level.bottle);
     this.ctx.translate(-this.camera_X, 0);
 
-    let self = this;        //hier ist "this" unbekannt, daher außerhalb definieren
+    let self = this; //hier ist "this" unbekannt, daher außerhalb definieren
     requestAnimationFrame(() => {
       self.draw();
     });
@@ -241,4 +258,3 @@ class World {
     this.character.world = this;
   }
 }
-

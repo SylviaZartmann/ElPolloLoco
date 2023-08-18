@@ -83,7 +83,7 @@ class MovableObject extends DrawableObject {
 
  killed(mo) {
     if (mo instanceof Chicken) this.killedChicken++;
-    if (mo instanceof Endboss) this.killedEndboss++;
+    else if (mo instanceof Endboss) this.killedEndboss++;
     mo.energy -= this.Damage;
     if (mo.energy <= 0) {
       mo.energy = 0;
@@ -121,6 +121,8 @@ class MovableObject extends DrawableObject {
       }
     }
   }
+
+
 
   isInFrontOf(chick) {
     return (
@@ -169,4 +171,6 @@ class MovableObject extends DrawableObject {
   getRandomBoolean() {
     return Math.random() < 0.5;
   }
+
+
 }

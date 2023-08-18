@@ -1,13 +1,7 @@
 let canvas;
 let world;
-
-function init() {
-  canvas = document.getElementById("canvas");
-  world = new World(canvas, keyboard);
-  
-}
-
 let keyboard = new Keyboard();
+let canvasstarted = false;
 
 window.addEventListener("keydown", (e) => {
   if (e.keyCode == 39) {
@@ -31,10 +25,10 @@ window.addEventListener("keydown", (e) => {
   if (e.keyCode == 32) {
     keyboard.UP = true;
   }
-  if (e.keyCode == 16) {
+  if (e.keyCode == 40) {
     keyboard.ACTION = true;
   }
-  if (e.keyCode == 67) {
+  if (e.keyCode == 83) {
     keyboard.ACTION = true;
   }
 });
@@ -61,10 +55,52 @@ window.addEventListener("keyup", (e) => {
   if (e.keyCode == 32) {
     keyboard.UP = false;
   }
-  if (e.keyCode == 16) {
+  if (e.keyCode == 40) {
     keyboard.ACTION = false;
   }
-  if (e.keyCode == 67) {
+  if (e.keyCode == 83) {
     keyboard.ACTION = false;
   }
 });
+
+function startGame1() {
+  document.getElementById('startscreen').classList.add("d-none");
+  init();
+}
+
+function startGame2() {
+  document.getElementById('overlay').classList.add("d-none");
+  document.getElementById('controls').classList.add("d-none");
+  init();
+}
+
+function newGame() {
+  document.getElementById('overlay').classList.add("d-none");
+  document.getElementById('endScreen').classList.add("d-none");
+  window.location.reload();
+}
+
+function showControls() {
+  document.getElementById('overlay').classList.remove("d-none");
+  document.getElementById('controls').classList.remove("d-none");
+  document.getElementById('startscreen').classList.add("d-none");
+}
+
+function showEndscreen(who) {
+    document.getElementById('overlay').classList.remove("d-none");
+    document.getElementById('endScreen').classList.remove("d-none");
+    document.getElementById('winOrLose').innerHTML = '';
+    document.getElementById('killedChicken').innerHTML = '';
+if (who instanceof Endboss) {
+  document.getElementById('winOrLose').innerHTML = 'YOU WIN';
+} else {
+  document.getElementById('winOrLose').innerHTML = 'YOU LOSE';
+}
+  document.getElementById('killedChicken').innerHTML = world.character.killedChicken;  
+}
+
+function init() {
+  initLevel();  
+  canvas = document.getElementById("canvas");
+  world = new World(canvas, keyboard, canvasstarted);
+}

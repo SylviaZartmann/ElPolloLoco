@@ -10,7 +10,7 @@ class Character extends MovableObject {
   offsetRight = 55;
   offsetBottom = 190;
   currentTime;
-  killedChicken = 0;
+  killedChicken = 20;
   killedEndboss = 0;
   alive = true;
   collectedCoins = 0;
@@ -122,6 +122,9 @@ class Character extends MovableObject {
         setTimeout(() => {
           this.positionY += 5;
         }, 500);
+        setTimeout(() => {
+          showEndscreen(this);
+        }, 2000);
       }
       
       this.world.camera_X = -this.positionX + 100; 
@@ -155,6 +158,7 @@ class Character extends MovableObject {
   resetpositionY() {
     this.positionY = 85;
   }
+
 }
 
 function resetLastMove() {

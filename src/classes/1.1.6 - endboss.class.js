@@ -75,11 +75,16 @@ class Endboss extends MovableObject {
         this.positionX = this.positionX - this.jumpingwidth;
       }
 
-      if (this.isDead()) {
+      if (this.isDead()) {        
         this.Damage = 0;
         this.positionX += 2;
+        setTimeout(() => {
+          showEndscreen(this);
+        }, 2000);
+        
       }
     }, 1000/60);
+
     setInterval(() => {
       if (this.isDead()) {
         this.playAnimation(this.IMAGES_DEAD);
@@ -95,6 +100,4 @@ class Endboss extends MovableObject {
       } 
     }, 175);
   }
-
-
 }
