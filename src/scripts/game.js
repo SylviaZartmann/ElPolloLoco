@@ -100,12 +100,6 @@ document.getElementById('btn-bottle').addEventListener('touchend', (ev) => {
   keyboard.ACTION = false;
 });
 
-function startGame1() {
-  document.getElementById('startscreen').classList.add("d-none");
-  document.getElementById('mobilButtons').classList.remove("d-none");
-  init();
-}
-
 function startGame2() {
   document.getElementById('overlay').classList.add("d-none");
   document.getElementById('controls').classList.add("d-none");
@@ -128,6 +122,7 @@ function showControls() {
 function showEndscreen(who) {
     document.getElementById('overlay').classList.remove("d-none");
     document.getElementById('endScreen').classList.remove("d-none");
+    document.getElementById('mobilButtons').classList.add("d-none");
     document.getElementById('winOrLose').innerHTML = '';
     document.getElementById('killedChicken').innerHTML = '';
 if (who instanceof Endboss) {
