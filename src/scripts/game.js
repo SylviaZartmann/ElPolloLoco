@@ -63,14 +63,53 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
+document.getElementById('btn-left').addEventListener('touchstart', (ev) => {
+  ev.preventDefault();
+  keyboard.LEFT = true;
+});
+
+document.getElementById('btn-left').addEventListener('touchend', (ev) => {
+  ev.preventDefault();
+  keyboard.LEFT = false;
+});
+
+document.getElementById('btn-right').addEventListener('touchstart', (ev) => {
+  ev.preventDefault();
+  keyboard.RIGHT = true;
+});
+
+document.getElementById('btn-right').addEventListener('touchend', (ev) => {
+  ev.preventDefault();
+  keyboard.RIGHT = false;
+});
+
+document.getElementById('btn-up').addEventListener('touchstart', (ev) => {
+  ev.preventDefault();
+  keyboard.UP = true;
+});
+document.getElementById('btn-up').addEventListener('touchend', (ev) => {
+  ev.preventDefault();
+  keyboard.UP = false;
+});
+document.getElementById('btn-bottle').addEventListener('touchstart', (ev) => {
+  ev.preventDefault();
+  keyboard.ACTION = true;
+});
+document.getElementById('btn-bottle').addEventListener('touchend', (ev) => {
+  ev.preventDefault();
+  keyboard.ACTION = false;
+});
+
 function startGame1() {
   document.getElementById('startscreen').classList.add("d-none");
+  document.getElementById('mobilButtons').classList.remove("d-none");
   init();
 }
 
 function startGame2() {
   document.getElementById('overlay').classList.add("d-none");
   document.getElementById('controls').classList.add("d-none");
+  document.getElementById('mobilButtons').classList.remove("d-none");
   init();
 }
 

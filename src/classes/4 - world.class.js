@@ -32,7 +32,7 @@ class World {
       this.checkPositions();
       this.checkHitByBottle();
       this.stopGame();
-    }, 50);
+    }, 70);
   }
 
   runSecondInterval() {
@@ -112,12 +112,12 @@ class World {
         }
         if (enemy instanceof Endboss) {
           if (this.character.checkDistance(enemy)) {
-            if (this.character.distance <= 150) {
+            if (this.character.distance <= 200) {
               enemy.alerted = false;
               enemy.attacking = true;
             } else if (
-              this.character.distance <= 300 &&
-              this.character.distance >= 150
+              this.character.distance <= 400 &&
+              this.character.distance >= 200
             ) {
               enemy.alerted = true;
               enemy.attacking = false;
@@ -188,10 +188,7 @@ class World {
         })
       })
     }
-    }
-    
-    )
-    
+    })
   }
 
 

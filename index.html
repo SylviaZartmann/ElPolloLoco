@@ -12,14 +12,16 @@
 
   <body>
     <h1>El Pollo Loco</h1>
-
     <div class="rotateDevice">
       <h2>rotate your device</h2>
       <img src="src/img/11_webpage/rotate-smartphone.png" alt="" />
     </div>
+    
+    
     <div class="content">
+      <canvas id="canvas" height="480px" width="720px"> </canvas>
       <div class="startscreen" id="startscreen" >
-        <img src="src/img/9_intro_outro_screens/start/startscreen_1.png" alt="">
+        <img class="startscreenimg" src="src/img/9_intro_outro_screens/start/startscreen_1.png" alt="">
         <div class="startscreenButtons">
           <div class="button" onclick="showControls()">controls</div>
           <div class="button" onclick="startGame1()">Start game</div>
@@ -27,7 +29,7 @@
       </div>
       <div class="overlay d-none" id="overlay">
         <div class="background"></div>
-        <img src="src/img/5_background/first_half_background.png" />
+        <img class="overlayimg" src="src/img/5_background/first_half_background.png" />
         <div class="endScreen d-none" id="endScreen">
           <h2 id="winOrLose">YOU WIN</h2>
           <div class="flex">
@@ -71,9 +73,20 @@
           <div class="button" onclick="startGame2()">Start game</div>
         </div>
       </div>
-      <canvas id="canvas" width="720px" height="480px"> </canvas>
+      
+      
+      
     </div>    
-    
+    <div id="mobilButtons" class="mobile-buttons d-none">
+        <div class="mobile-left">
+          <button id="btn-left" class="touchcontrol"><img class="touch-arrow" src="src/img/11_webpage/pfeil-nach-links.png" alt=""></button>
+          <button id="btn-right" class="touchcontrol"><img class="touch-arrow" src="src/img/11_webpage/pfeil-nach-rechts.png" alt=""></button>
+        </div>
+        <div class="mobile-right">
+          <button id="btn-up" class="touchcontrol"><img class="touch-arrow" src="src/img/11_webpage/pfeil-nach-oben.png" alt=""></button>
+          <button id="btn-bottle" class="touchcontrol"><img class="touch-bottle"src="src/img/6_salsa_bottle/salsa_bottle.png" alt=""></button>
+        </div>
+      </div>
     <script src="src/classes/1 - drawable-object.class.js"></script>
     <script src="src/classes/1.1 - movable-object.class.js"></script>
     <script src="src/classes/1.1.3 - character.class.js"></script>

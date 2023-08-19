@@ -4,14 +4,19 @@ class Cloud extends MovableObject {
   height = 250;
   speed = 0.15;
 
-  constructor(imagepath) {
+  constructor(imagepath, positionX) {
     super().loadImage(imagepath);
-    this.positionX = 120 + Math.random() * 500; //ohne "super()", weil variable
-    //Zahl zwischen 200 und 700 - zufällig genereiert
+    this.positionX = positionX;
     this.animate();
   }
 
   animate() {
-    this.moveLeft();
+    setInterval(() => {
+      this.moveLeft();
+    }, 1000/60);
+    
+    if (this.positionX <= -300) {
+      this.positionX = 719*4;
+    }
   }
 }

@@ -10,8 +10,11 @@ function initLevel() {
   (endboss = []),
 
   (clouds = [
-    new Cloud("src/img/5_background/layers/4_clouds/1.png"),
-    new Cloud("src/img/5_background/layers/4_clouds/2.png"),
+    new Cloud("src/img/5_background/layers/4_clouds/1.png", 0),
+    new Cloud("src/img/5_background/layers/4_clouds/2.png", 719),
+    new Cloud("src/img/5_background/layers/4_clouds/1.png", 719*2),
+    new Cloud("src/img/5_background/layers/4_clouds/2.png", 719*3),
+    new Cloud("src/img/5_background/layers/4_clouds/1.png", 719*4),
   ]),
 
   (backgroundObject = [
