@@ -12,6 +12,8 @@ class Chicken extends MovableObject {
   minExistence = 400;
   maxExistence = 2560;
 
+  killed_chicken = new Audio('src/audio/killed_chicken.mp3');
+
   IMAGES_WALKING = [
     "src/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
     "src/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
@@ -57,16 +59,20 @@ class Chicken extends MovableObject {
       if (this.isDead()) {
         this.Damage = 0;
         this.offsetTop = 500;
+        this.killed_chicken.play();
+        setTimeout(() => {
+        this.killed_chicken.pause();
+      }, 800);
         setTimeout(() => {
           this.removeInstance(world.level.enemies);
         }, 3000);
-        
       }
     }, 1000/60);
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
       if (this.isDead()) {
-      this.playAnimation(this.IMAGES_DEAD);
+      this.playAnimation(this.IMAGES_DEAD); 
+      
       }
     }, 250);
   }

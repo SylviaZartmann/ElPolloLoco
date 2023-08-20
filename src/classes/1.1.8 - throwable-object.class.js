@@ -10,6 +10,10 @@ class ThrowableObject extends MovableObject {
   offsetRight = 0;
   offsetBottom = 0;
 
+  
+  rotating_sound = new Audio('src/audio/throw_bottle.mp3');
+  spalshing_sound = new Audio('src/audio/break_bottle.mp3');
+
   ROTATING_BOTTLE = [
     "src/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
     "src/img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",
@@ -51,10 +55,19 @@ class ThrowableObject extends MovableObject {
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.flying) this.playAnimation(this.ROTATING_BOTTLE);
+      if (this.flying) {
+        this.rotating_sound.play();
+        this.playAnimation(this.ROTATING_BOTTLE);
+      }
       if (!this.flying) {
+        this.rotating_sound.pause();
+        this.spalshing_sound.play();
+        
         this.playAnimation(this.SPLASH_BOTTLE);
         this.gettingPictureOfInterest('6_bottle_splash');
+        setTimeout(() => {
+          this.spalshing_sound.pause(); 
+        }, 1000);
         if (this.imageOfInterest) {
         this.removeInstance(world.throwableObjects);
         }

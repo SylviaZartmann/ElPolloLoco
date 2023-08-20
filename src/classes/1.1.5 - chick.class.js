@@ -2,7 +2,8 @@ class Chick extends MovableObject {
   positionY = 390;
   height = 35;
   width = 35;
-  movingDirection = 'left';
+  
+  chick_shirping = new Audio('src/audio/Chick shirping.mp3');
  
   IMAGES_WALKING = [
     "src/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
@@ -19,7 +20,8 @@ class Chick extends MovableObject {
     this.loadImages(this.IMAGES_WALKING);
     this.speed = 1.2 + Math.random() * 1.5;
     this.animate();
-    
+    this.chick_shirping.play();   
+    this.chick_shirping.volume = 0.3;   
   }
 
   animate() {
@@ -43,6 +45,7 @@ class Chick extends MovableObject {
     if (!this.chickenAdded) {
       let currentTime = new Date();
       if (currentTime - this.hetchTime >= 20000) {
+        this.chick_shirping.pause();   
         this.chickenAdded = true;
         world.level.enemies.push(
           new Chicken(this.positionX, this.otherDirection)

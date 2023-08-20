@@ -10,14 +10,14 @@ class Character extends MovableObject {
   offsetRight = 55;
   offsetBottom = 190;
   currentTime;
-  killedChicken = 20;
+  killedChicken = 0;
   killedEndboss = 0;
   alive = true;
   collectedCoins = 0;
   collectedBottles = 0;
 
   world;
-  //walking_sound = new Audio('src/audio/running.mp3');
+  walking_sound = new Audio('src/audio/running.mp3');
   speed = 5;
 
   IMAGES_IDLE = [
@@ -101,7 +101,7 @@ class Character extends MovableObject {
   animate() {
     resetLastMove(); 
     setInterval(() => {
-      //this.walking_sound.pause();
+      
       if (this.world.keyboard.RIGHT && this.positionX < this.maxExistence && !this.isDead()) {
         this.moveRight();
         this.otherDirection = false; 
@@ -118,6 +118,7 @@ class Character extends MovableObject {
       }
 
       if (this.isDead()) {
+        
         this.alive = false;
         setTimeout(() => {
           this.positionY += 5;
@@ -133,17 +134,21 @@ class Character extends MovableObject {
 
     setInterval(() => {
       if (this.isDead()) {
+        this.walking_sound.pause();
         this.playAnimation(this.IMAGES_DEAD);
       } else if (this.isHurt()) {
+        this.walking_sound.pause();
         this.playAnimation(this.IMAGES_HURT);
       } else if (this.isAboveGround()) {
+        this.walking_sound.pause();
         this.playAnimation(this.IMAGES_JUMPING);
       } else  if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        this.walking_sound.play();
         this.playAnimation(this.IMAGES_WALKING);
       } else if (this.world.keyboard.ACTION) {
         this.playAnimation(this.IMAGES_THROW);
       } else if (!this.world.keyboard.ACTION && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
-        
+        this.walking_sound.pause();
         let currentTime = new Date();
         let passedTime = currentTime - lastMove;
         if (passedTime >= 5000) {

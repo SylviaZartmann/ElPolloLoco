@@ -115,7 +115,7 @@ class MovableObject extends DrawableObject {
 
   helloEndboss() {
     if (!this.endbossAdded) {
-      if (this.killedChicken === 20) {
+      if (this.killedChicken === 10) {
         this.endbossAdded = true;
         world.level.endboss.push(new Endboss());
       }

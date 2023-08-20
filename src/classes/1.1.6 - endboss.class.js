@@ -15,6 +15,8 @@ class Endboss extends MovableObject {
   attacked = false;
   jumpingwidth = 20;
 
+  endboss_coming = new Audio('src/audio/endboss_coming.mp3');
+
   IMAGES_WALKING = [
     "src/img/4_enemie_boss_chicken/1_walk/G1.png",
     "src/img/4_enemie_boss_chicken/1_walk/G2.png",
@@ -54,13 +56,13 @@ class Endboss extends MovableObject {
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
-    
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_ALERTING);
     this.loadImages(this.IMAGES_ATTACKING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.animate();
+    this.endboss_coming.play();  
   }
 
   animate() {
@@ -75,13 +77,13 @@ class Endboss extends MovableObject {
         this.positionX = this.positionX - this.jumpingwidth;
       }
 
-      if (this.isDead()) {        
+      if (this.isDead()) {     
+        this.endboss_coming.pause();   
         this.Damage = 0;
         this.positionX += 2;
         setTimeout(() => {
           showEndscreen(this);
         }, 2000);
-        
       }
     }, 1000/60);
 
