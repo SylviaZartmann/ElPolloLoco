@@ -14,6 +14,8 @@ class World {
   wantedTime = 5000;
   existing = false;
 
+  endboss_coming = new Audio('src/audio/endboss_coming.mp3');
+
   throwableObjects = [];
 
   constructor(canvas, keyboard) {
@@ -42,6 +44,12 @@ class World {
   }
 
   checkCollision() {
+    this.collisionOnGround();
+    this.collisionInTheAir();
+    this.collisionCollection();
+  }
+
+  collisionOnGround()  {
     if (this.character.positionY === 85) {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
@@ -55,16 +63,16 @@ class World {
         });
       });
     }
+  }
+
+  collisionInTheAir() {
     if (this.character.isAboveGround()) {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
           this.character.whichDirection(enemy);
           this.character.defineHitbox(enemy);
-          if (
-            this.character.isColliding(enemy) &&
-            this.character.fallingSpeedY <= 0
-          ) {
+          if (this.character.isColliding(enemy) && this.character.fallingSpeedY <= 0) {
             if (enemy instanceof Chicken && !this.character.isDead()) {
               this.character.killed(enemy);
               this.character.jump();
@@ -77,6 +85,9 @@ class World {
         });
       });
     }
+  }
+
+  collisionCollection() {
     if (this.character) {
       let collectableItems = [this.level.coin, this.level.bottle];
       collectableItems.forEach((allItems) => {
@@ -85,40 +96,53 @@ class World {
           this.character.defineHitbox(item);
           if (this.character.isColliding(item)) {
             if (item instanceof Coin) {
-              item.removeInstance(this.level.coin);
-              this.character.collectedCoins++;
-              this.coinbar.setPercentage(this.character.collectedCoins);
+              this.whatToDoWithCoin(item);
             } else {
-              item.removeInstance(this.level.bottle);
-              this.character.collectedBottles++;
-              this.bottlebar.setPercentage(this.character.collectedBottles);
+              this.whatToDoWithBottle(item);
             }
           }
         });
       });
     }
   }
+
+  whatToDoWithCoin(item) {
+    item.collect_coin.currentTime = 0;
+    item.collect_coin.play();
+    setTimeout(() => {
+      item.collect_coin.pause();
+    }, 400);
+    item.removeInstance(this.level.coin);
+    this.character.collectedCoins++;
+    this.coinbar.setPercentage(this.character.collectedCoins);
+  }
+
+  whatToDoWithBottle(item) {
+    item.collect_bottle.currentTime = 0;
+    item.collect_bottle.play();
+    setTimeout(() => {
+      item.collect_bottle.pause();
+    }, 300);
+    item.removeInstance(this.level.bottle);
+    this.character.collectedBottles++;
+    this.bottlebar.setPercentage(this.character.collectedBottles);
+  }
+
+
   checkPositions() {
     let enemyTypes = [this.level.lowEnemies, this.level.endboss];
     enemyTypes.forEach((allEnemies) => {
       allEnemies.forEach((enemy) => {
         this.character.whichDirection(enemy);
         this.character.defineHitbox(enemy);
-        if (this.character.isInFrontOf(enemy)) {
-          enemy.otherDirection = false;
-        }
-        if (this.character.isBehind(enemy)) {
-          enemy.otherDirection = true;
-        }
+        if (this.character.isInFrontOf(enemy)) enemy.otherDirection = false;
+        if (this.character.isBehind(enemy)) enemy.otherDirection = true;
         if (enemy instanceof Endboss) {
           if (this.character.checkDistance(enemy)) {
             if (this.character.distance <= 200) {
               enemy.alerted = false;
               enemy.attacking = true;
-            } else if (
-              this.character.distance <= 400 &&
-              this.character.distance >= 200
-            ) {
+            } else if (this.character.distance <= 400 && this.character.distance >= 200) {
               enemy.alerted = true;
               enemy.attacking = false;
             } else {
@@ -170,42 +194,41 @@ class World {
   }
 
   stopGame() {
-    let endboss = this.level.endboss;
+    let enemyTypes = [this.level.lowEnemies, this.level.enemies, this.level.egg];
+    let endboss = [this.level.endboss];
     endboss.forEach((endboss) => {
-      if (endboss.energy <= 0) {
-      let enemyTypes = [this.level.lowEnemies, this.level.enemies, this.level.egg];
+      if (endboss.energy <= 0 || this.character.isDead()) {
+        this.stopShirping();
+        this.character.hitboxY = 2000;
       enemyTypes.forEach((allEnemies) => {
         allEnemies.forEach((enemy) => {
           enemy.removeInstance(allEnemies);
         })
       })
     }
-    if (this.character.isDead()) {
-      let enemyTypes = [this.level.lowEnemies, this.level.enemies, this.level.egg];
-      enemyTypes.forEach((allEnemies) => {
-        allEnemies.forEach((enemy) => {
-          enemy.removeInstance(allEnemies);
-        })
+  })
+  }
+
+  stopShirping() {
+    let enemyTypes = [this.level.lowEnemies];
+    enemyTypes.forEach((allEnemies) => {
+      allEnemies.forEach((enemy) => {
+        enemy.chick_shirping.pause();
       })
-    }
     })
   }
 
-
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
     this.ctx.translate(this.camera_X, 0);
     this.addBackgroundToMap(this.level.backgroundObject);
     this.addBackgroundToMap(this.level.clouds);
     this.addBackgroundToMap(this.level.egg);
     this.addBackgroundToMap(this.level.coin);
     this.ctx.translate(-this.camera_X, 0);
-
     this.addToMap(this.healthbar);
     this.addToMap(this.bottlebar);
     this.addToMap(this.coinbar);
-
     this.ctx.translate(this.camera_X, 0);
     this.addBackgroundToMap(this.level.endboss);
     this.addToMap(this.character);
@@ -214,8 +237,7 @@ class World {
     this.addBackgroundToMap(this.throwableObjects);
     this.addBackgroundToMap(this.level.bottle);
     this.ctx.translate(-this.camera_X, 0);
-
-    let self = this; //hier ist "this" unbekannt, daher außerhalb definieren
+    let self = this;
     requestAnimationFrame(() => {
       self.draw();
     });

@@ -8,6 +8,8 @@ class Bottle extends CollectableObject {
     offsetBottom = 22;
     maxExistence = 2700;
     minExistence = 300;
+    
+    collect_bottle = new Audio ('src/audio/get_bottle.mp3');
 
     BOTTLE_GROUND = [
         "src/img/6_salsa_bottle/1_salsa_bottle_on_ground.png",

@@ -18,6 +18,8 @@ class Character extends MovableObject {
 
   world;
   walking_sound = new Audio('src/audio/running.mp3');
+  hurt_sound = new Audio('src/audio/pepe_hurt.mp3');
+  dead_sound = new Audio('src/audio/pepe_dead.mp3');
   speed = 5;
 
   IMAGES_IDLE = [
@@ -95,13 +97,19 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_THROW);
     this.applyGravity();
     this.animate();
-    
   }
 
   animate() {
-    resetLastMove(); 
+    this.resetLastMove(); 
     setInterval(() => {
-      
+    this.sixtyFramesPerSecond();
+    }, 1000 / 60);
+    setInterval(() => {
+    this.playAllTheAnimations();
+  }, 100);
+  } 
+
+  sixtyFramesPerSecond() {
       if (this.world.keyboard.RIGHT && this.positionX < this.maxExistence && !this.isDead()) {
         this.moveRight();
         this.otherDirection = false; 
@@ -110,60 +118,65 @@ class Character extends MovableObject {
         this.moveLeft();
         this.otherDirection = true; 
       } 
-      if (this.world.keyboard.UP && !this.isAboveGround() && !this.isDead()) {
-        this.jump();
-      }  
-      if (!this.isAboveGround() && !this.isDead()) {
-        this.resetpositionY();
-      }
-
-      if (this.isDead()) {
-        
-        this.alive = false;
-        setTimeout(() => {
-          this.positionY += 5;
-        }, 500);
-        setTimeout(() => {
-          showEndscreen(this);
-        }, 2000);
-      }
-      
+      if (this.world.keyboard.UP && !this.isAboveGround() && !this.isDead()) this.jump();  
+      if (!this.isAboveGround() && !this.isDead()) this.resetpositionY();
+      this.whatToDoWithDeadMan();
       this.world.camera_X = -this.positionX + 100; 
       this.helloEndboss();
-    }, 1000 / 60);
+  }
 
-    setInterval(() => {
+  playAllTheAnimations() {
       if (this.isDead()) {
-        this.walking_sound.pause();
-        this.playAnimation(this.IMAGES_DEAD);
+        this.deadManWalking();
       } else if (this.isHurt()) {
         this.walking_sound.pause();
         this.playAnimation(this.IMAGES_HURT);
+        this.hurt_sound.play();
       } else if (this.isAboveGround()) {
         this.walking_sound.pause();
         this.playAnimation(this.IMAGES_JUMPING);
       } else  if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
         this.walking_sound.play();
         this.playAnimation(this.IMAGES_WALKING);
-      } else if (this.world.keyboard.ACTION) {
-        this.playAnimation(this.IMAGES_THROW);
-      } else if (!this.world.keyboard.ACTION && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
+      } else if (this.world.keyboard.ACTION) this.playAnimation(this.IMAGES_THROW);
+        else if (!this.world.keyboard.ACTION && !this.world.keyboard.RIGHT && !this.world.keyboard.LEFT && !this.isDead() && !this.isHurt() && !this.isAboveGround()) {
         this.walking_sound.pause();
-        let currentTime = new Date();
-        let passedTime = currentTime - lastMove;
-        if (passedTime >= 5000) {
-          this.playAnimation(this.IMAGES_LONGIDLE);
-        } else {
-          this.playAnimation(this.IMAGES_IDLE);
-        }
+        this.whatAboutIdleStates();
       } 
-    }, 100);
-  } 
+  }
 
   resetpositionY() {
     this.positionY = 85;
   }
+  
+  whatToDoWithDeadMan() {
+  if (this.isDead()) {
+    this.alive = false;
+    setTimeout(() => {
+      this.positionY += 5;
+    }, 500);
+    setTimeout(() => {
+      showEndscreen(this);
+    }, 3000);
+  }
+}
 
+   deadManWalking() {
+    if (!this.dead_soundPlayed) {
+      this.dead_sound.play(); 
+      this.dead_soundPlayed = true;
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+    this.walking_sound.pause();
+    this.playAnimation(this.IMAGES_DEAD);
+   }
+
+  whatAboutIdleStates() { 
+    let currentTime = new Date();
+    let passedTime = currentTime - lastMove;
+    if (passedTime >= 5000) this.playAnimation(this.IMAGES_LONGIDLE);
+    else this.playAnimation(this.IMAGES_IDLE);
+  }
+  
 }
 
 function resetLastMove() {

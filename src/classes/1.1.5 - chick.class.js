@@ -20,19 +20,15 @@ class Chick extends MovableObject {
     this.loadImages(this.IMAGES_WALKING);
     this.speed = 1.2 + Math.random() * 1.5;
     this.animate();
-    this.chick_shirping.play();   
-    this.chick_shirping.volume = 0.3;   
   }
 
   animate() {
+    this.chick_shirping.play();   
+    this.chick_shirping.volume = 0.3;   
     setTimeout(() => {
       setInterval(() => {
-      if (!this.otherDirection) {
-        this.moveLeft();
-      }
-      if (this.otherDirection) {
-        this.moveRight();
-      }
+      if (!this.otherDirection) this.moveLeft();
+      if (this.otherDirection) this.moveRight();
       this.chickBecomesChicken();
     }, 1000/60);
     setInterval(() => {

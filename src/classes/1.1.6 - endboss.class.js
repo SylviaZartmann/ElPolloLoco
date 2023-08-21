@@ -15,7 +15,6 @@ class Endboss extends MovableObject {
   attacked = false;
   jumpingwidth = 20;
 
-  endboss_coming = new Audio('src/audio/endboss_coming.mp3');
 
   IMAGES_WALKING = [
     "src/img/4_enemie_boss_chicken/1_walk/G1.png",
@@ -62,44 +61,48 @@ class Endboss extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DEAD);
     this.animate();
-    this.endboss_coming.play();  
   }
 
   animate() {
     setInterval(() => {
-      if (!this.alerted && !this.attacking && !this.isDead()) {
-        this.Damage = 20;
-        this.moveLeft();
-
-      }
-      if (this.attacking && this.imageOfInterest && !this.isDead()) {
-        this.Damage = 35;
-        this.positionX = this.positionX - this.jumpingwidth;
-      }
-
-      if (this.isDead()) {     
-        this.endboss_coming.pause();   
-        this.Damage = 0;
-        this.positionX += 2;
-        setTimeout(() => {
-          showEndscreen(this);
-        }, 2000);
-      }
+      this.walkingAndStuff();
     }, 1000/60);
-
     setInterval(() => {
-      if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
-      } else if (this.isHurt() && !this.isDead()) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (!this.alerted && !this.attacking && !this.isDead() && !this.isHurt()) {
-        this.playAnimation(this.IMAGES_WALKING);
-      } else if (this.alerted && !this.attacking && !this.isDead() && !this.isHurt()) {
-        this.playAnimation(this.IMAGES_ALERTING);
-      } else if (this.attacking && !this.alerted && !this.isDead() && !this.isHurt()) {
-        this.playAnimation(this.IMAGES_ATTACKING);
-        this.gettingPictureOfInterest('G18');
-      } 
+      this.animationAndStuff();
     }, 175);
+  }
+
+  walkingAndStuff() {
+    if (!this.alerted && !this.attacking && !this.isDead()) {
+      this.Damage = 20;
+      this.moveLeft();
+    }
+    if (this.attacking && this.imageOfInterest && !this.isDead()) {
+      this.Damage = 35;
+      this.positionX = this.positionX - this.jumpingwidth;
+    }
+    if (this.isDead()) {     
+      this.endboss_coming.pause();   
+      this.Damage = 0;
+      this.positionX += 2;
+      setTimeout(() => {
+        showEndscreen(this);
+      }, 2000);
+    }
+  }
+  
+  animationAndStuff() {
+    if (this.isDead()) {
+      this.playAnimation(this.IMAGES_DEAD);
+    } else if (this.isHurt() && !this.isDead()) {
+      this.playAnimation(this.IMAGES_HURT);
+    } else if (!this.alerted && !this.attacking && !this.isDead() && !this.isHurt()) {
+      this.playAnimation(this.IMAGES_WALKING);
+    } else if (this.alerted && !this.attacking && !this.isDead() && !this.isHurt()) {
+      this.playAnimation(this.IMAGES_ALERTING);
+    } else if (this.attacking && !this.alerted && !this.isDead() && !this.isHurt()) {
+      this.playAnimation(this.IMAGES_ATTACKING);
+      this.gettingPictureOfInterest('G18');
+    } 
   }
 }

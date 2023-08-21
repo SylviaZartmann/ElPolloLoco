@@ -12,6 +12,8 @@ class MovableObject extends DrawableObject {
   minExistence = 0;
   imageOfInterest = false;
 
+  endboss_coming = new Audio('src/audio/endboss_coming.mp3');
+
   applyGravity() {
     setInterval(() => {
       if ((this.isAboveGround() && !this.isDead()) || this.fallingSpeedY > 0) {
@@ -107,7 +109,7 @@ class MovableObject extends DrawableObject {
   }
 
   playAnimation(images) {
-    let i = this.currentImage % images.length; // % = Modulo Funktion
+    let i = this.currentImage % images.length;
     let path = images[i];
     this.img = this.imageCache[path];
     this.currentImage++;
@@ -117,12 +119,11 @@ class MovableObject extends DrawableObject {
     if (!this.endbossAdded) {
       if (this.killedChicken === 10) {
         this.endbossAdded = true;
+        this.endboss_coming.play();  
         world.level.endboss.push(new Endboss());
       }
     }
   }
-
-
 
   isInFrontOf(chick) {
     return (
@@ -171,6 +172,4 @@ class MovableObject extends DrawableObject {
   getRandomBoolean() {
     return Math.random() < 0.5;
   }
-
-
 }

@@ -10,7 +10,6 @@ class ThrowableObject extends MovableObject {
   offsetRight = 0;
   offsetBottom = 0;
 
-  
   rotating_sound = new Audio('src/audio/throw_bottle.mp3');
   spalshing_sound = new Audio('src/audio/break_bottle.mp3');
 
@@ -42,37 +41,43 @@ class ThrowableObject extends MovableObject {
 
   throw() {
     this.applyGravity();
-
     setInterval(() => {
-      if (this.flying && this.otherDirection) {
-        this.positionX -= 4;
-      } else if (this.flying) {
-        this.positionX += 4;
-      }
-      if (this.flying && this.positionY + this.height >= 400) {
-        this.flying = false;
-      }
+      this.flyingAndStuff();
     }, 1000 / 60);
-
     setInterval(() => {
-      if (this.flying) {
-        this.rotating_sound.play();
-        this.playAnimation(this.ROTATING_BOTTLE);
-      }
-      if (!this.flying) {
-        this.rotating_sound.pause();
-        this.spalshing_sound.play();
-        
-        this.playAnimation(this.SPLASH_BOTTLE);
-        this.gettingPictureOfInterest('6_bottle_splash');
-        setTimeout(() => {
-          this.spalshing_sound.pause(); 
-        }, 1000);
-        if (this.imageOfInterest) {
-        this.removeInstance(world.throwableObjects);
-        }
-      }
+      this.soundAndAnimation();
     }, 100);
+  }
+
+  flyingAndStuff() {
+    if (this.flying && this.otherDirection) {
+      this.positionX -= 4;
+    } else if (this.flying) {
+      this.positionX += 4;
+    }
+    if (this.flying && this.positionY + this.height >= 400) {
+      this.flying = false;
+    }
+  }
+
+  soundAndAnimation() {
+    if (this.flying) {
+      this.rotating_sound.play();
+      this.playAnimation(this.ROTATING_BOTTLE);
+    }
+    if (!this.flying) {
+      this.rotating_sound.pause();
+      this.spalshing_sound.play();
+      
+      this.playAnimation(this.SPLASH_BOTTLE);
+      this.gettingPictureOfInterest('6_bottle_splash');
+      setTimeout(() => {
+        this.spalshing_sound.pause(); 
+      }, 1000);
+      if (this.imageOfInterest) {
+      this.removeInstance(world.throwableObjects);
+      }
+    }
   }
 }
 

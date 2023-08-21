@@ -38,15 +38,12 @@ class Eggstate extends MovableObject {
       setInterval(() => {
       this.currentTime = new Date();
       this.elapsedTime = this.currentTime - this.existance;
-      if (this.elapsedTime < 5000) {
-        this.playAnimation(this.IMAGES_EGGSTATE_SHAKING);
-      } else if (!this.chickAdded) {
+      if (this.elapsedTime < 5000) this.playAnimation(this.IMAGES_EGGSTATE_SHAKING); 
+      else if (!this.chickAdded) {
         this.playAnimation(this.IMAGES_EGGSTATE_CRACKING);
         this.gettingPictureOfInterest('egg_crack04');
       }
-      if (!this.chickAdded && world) {
-          this.eggBecomesChick(this.positionX);
-        }
+      if (!this.chickAdded && world) this.eggBecomesChick(this.positionX);
     }, 250); 
   }
   

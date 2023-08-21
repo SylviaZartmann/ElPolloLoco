@@ -8,6 +8,8 @@ class Coin extends CollectableObject {
   offsetRight = 60;
   offsetBottom = 120;
 
+  collect_coin = new Audio ('src/audio/get_coin.mp3');
+
   COIN_FLYING = ["src/img/8_coin/coin_1.png", "src/img/8_coin/coin_2.png"];
 
   constructor(positionX) {
