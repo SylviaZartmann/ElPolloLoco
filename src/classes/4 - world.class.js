@@ -49,7 +49,7 @@ class World {
     this.collisionCollection();
   }
 
-  collisionOnGround()  {
+  collisionOnGround() {
     if (this.character.positionY === 85) {
       let enemyTypes = [this.level.enemies, this.level.endboss];
       enemyTypes.forEach((allEnemies) => {
@@ -181,6 +181,7 @@ class World {
 
   checkHitByBottle() {
     this.level.endboss.forEach((endboss) => {
+      this.checkIfAlive(endboss);
       this.throwableObjects.forEach((bottle) => {
         bottle.whichDirection(endboss);
         bottle.defineHitbox(endboss);
@@ -193,29 +194,41 @@ class World {
     });
   }
 
-  stopGame() {
-    let enemyTypes = [this.level.lowEnemies, this.level.enemies, this.level.egg];
-    let endboss = [this.level.endboss];
-    endboss.forEach((endboss) => {
-      if (endboss.energy <= 0 || this.character.isDead()) {
-        this.stopShirping();
-        this.character.hitboxY = 2000;
-      enemyTypes.forEach((allEnemies) => {
-        allEnemies.forEach((enemy) => {
-          enemy.removeInstance(allEnemies);
-        })
-      })
+  checkIfAlive(endboss) {
+    if (endboss.energy <= 0 && !endboss.dead) {
+      endboss.dead = true;
+      endboss.energy = 0;
+      this.character.killedEndboss++;
     }
-  })
+  }
+
+  stopGame() {
+    if (this.character.killedEndboss > 0) {
+      this.character.killedEndboss++;
+      this.character.hitboxY = 2000;
+      this.removeSoundAndInstances();
+    }
+    if (this.character.isDead()) {
+      this.removeSoundAndInstances();
+    }
+  }
+
+  removeSoundAndInstances() {
+    let enemyTypes = [this.level.enemies, this.level.egg];
+    this.stopShirping();
+    enemyTypes.forEach((allEnemies) => {
+      allEnemies.forEach((enemy) => {
+        enemy.removeInstance(allEnemies);
+      })
+    })
   }
 
   stopShirping() {
-    let enemyTypes = [this.level.lowEnemies];
-    enemyTypes.forEach((allEnemies) => {
-      allEnemies.forEach((enemy) => {
+    this.level.lowEnemies.forEach((enemy) => {
+        enemy.removeInstance(this.level.lowEnemies);
         enemy.chick_shirping.pause();
       })
-    })
+    
   }
 
   draw() {

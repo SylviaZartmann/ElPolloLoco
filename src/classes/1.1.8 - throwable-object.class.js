@@ -67,13 +67,12 @@ class ThrowableObject extends MovableObject {
     }
     if (!this.flying) {
       this.rotating_sound.pause();
-      this.spalshing_sound.play();
-      
+      if (!this.splashed) {
+        this.spalshing_sound.play();
+      this.splashed = true;
+      }
       this.playAnimation(this.SPLASH_BOTTLE);
       this.gettingPictureOfInterest('6_bottle_splash');
-      setTimeout(() => {
-        this.spalshing_sound.pause(); 
-      }, 1000);
       if (this.imageOfInterest) {
       this.removeInstance(world.throwableObjects);
       }

@@ -71,7 +71,7 @@ class MovableObject extends DrawableObject {
       if (this.energy < 0) {
         this.energy = 0;
       } else {
-        this.lastHit = new Date().getTime(); //Zeitpunkt Speichern, wo verletzt wurde
+        this.lastHit = new Date().getTime();
         resetLastMove();
       }
     }
@@ -85,7 +85,6 @@ class MovableObject extends DrawableObject {
 
  killed(mo) {
     if (mo instanceof Chicken) this.killedChicken++;
-    else if (mo instanceof Endboss) this.killedEndboss++;
     mo.energy -= this.Damage;
     if (mo.energy <= 0) {
       mo.energy = 0;

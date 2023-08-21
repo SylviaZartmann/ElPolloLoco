@@ -14,6 +14,7 @@ class Endboss extends MovableObject {
   attacking = false;
   attacked = false;
   jumpingwidth = 20;
+  dead = false;
 
 
   IMAGES_WALKING = [

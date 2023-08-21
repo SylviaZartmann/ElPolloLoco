@@ -100,7 +100,7 @@ class Character extends MovableObject {
   }
 
   animate() {
-    this.resetLastMove(); 
+    resetLastMove(); 
     setInterval(() => {
     this.sixtyFramesPerSecond();
     }, 1000 / 60);
