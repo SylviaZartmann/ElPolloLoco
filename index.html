@@ -53,17 +53,17 @@
             <p>Walk left</p>
           </div>
           <div class="secondRow">
-            <div class="key">D</div>
-            <p>or</p>
-            <div class="key"><img src="src/img/11_webpage/pfeil-nach-rechts.png" alt=""></div>
-            <p>walk right</p>
-          </div>
-          <div class="secondRow">
             <div class="key">S</div>
             <p>or</p>
             <div class="key"><img src="src/img/11_webpage/pfeil-nach-oben.png" alt="" style="rotate: 180deg;">
             </div>
             <p>throw bottle</p>
+          </div>
+          <div class="secondRow">
+            <div class="key">D</div>
+            <p>or</p>
+            <div class="key"><img src="src/img/11_webpage/pfeil-nach-rechts.png" alt=""></div>
+            <p>walk right</p>
           </div>
         </div>
       </div>
@@ -98,13 +98,10 @@
       <div class="buttons d-none" id="buttons">
         <div class="button" onclick="startGame2()">Start game</div>
         <div class="button" id="controlsInstructions" onclick="showInstructions()">Instructions</div>
-        <div class="button" id="controlsInstructions" onclick="showControls()">Controls</div>
+        <div class="button mobileversion" id="controlsInstructions" onclick="showControls()">Controls</div>
       </div>
     </div>
-  </div>
-
-
-  <div id="mobilButtons" class="mobile-buttons d-none">
+     <div id="mobilButtons" class="d-none">
     <div class="mobile-left">
       <button id="btn-left" class="touchcontrol"><img class="touch-arrow" src="src/img/11_webpage/pfeil-nach-links.png"
           alt=""></button>
@@ -118,6 +115,10 @@
           src="src/img/6_salsa_bottle/salsa_bottle.png" alt=""></button>
     </div>
   </div>
+  </div>
+
+
+ 
   <script src="src/classes/1 - drawable-object.class.js"></script>
   <script src="src/classes/1.1 - movable-object.class.js"></script>
   <script src="src/classes/1.1.3 - character.class.js"></script>

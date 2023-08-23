@@ -142,10 +142,10 @@ class World {
         if (this.character.isBehind(enemy)) enemy.otherDirection = true;
         if (enemy instanceof Endboss) {
           if (this.character.checkDistance(enemy)) {
-            if (this.character.distance <= 200) {
+            if (this.character.distance <= 150) {
               enemy.alerted = false;
               enemy.attacking = true;
-            } else if (this.character.distance <= 400 && this.character.distance >= 200) {
+            } else if (this.character.distance <= 400 && this.character.distance >= 150) {
               enemy.alerted = true;
               enemy.attacking = false;
             } else {

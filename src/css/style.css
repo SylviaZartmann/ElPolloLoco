@@ -289,10 +289,6 @@ h3 {
     brightness(93%) contrast(93%);
 }
 
-.mobile-buttons {
-  display: none;
-}
-
 .mobile-left, .mobile-right {
   display: flex;
   gap: 40px;
@@ -338,12 +334,14 @@ h3 {
 }
 
 @media (orientation: landscape) and (hover:none) {
-
-  
-  
   .rotateDevice {
     display: none;
   }
+
+  .mobileversion {
+    display: none;
+  }
+
   .mobile-buttons {
     position: absolute;
     display: flex;

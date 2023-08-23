@@ -117,7 +117,7 @@ function startGame2() {
   StartEndscreen.pause();
   document.getElementById('overlay').classList.add("d-none");
   document.getElementById('instructions').classList.add("d-none");
-  document.getElementById('mobilButtons').classList.remove("d-none");
+  document.getElementById('mobilButtons').classList.add("mobile-buttons");
   init();
 }
 
@@ -125,12 +125,14 @@ function showInstructions() {
   document.getElementById('instructions').classList.remove("d-none");
   document.getElementById('buttons').classList.add("d-none");
   document.getElementById('backwards').classList.remove("d-none");
+  document.getElementById('mobilButtons').classList.remove("mobile-buttons");
 }
 
 function showControls() {
   document.getElementById('controls').classList.remove("d-none");
   document.getElementById('buttons').classList.add("d-none");
   document.getElementById('backwards').classList.remove("d-none");
+  document.getElementById('mobilButtons').classList.remove("mobile-buttons");
   
 }
 
@@ -157,7 +159,7 @@ function showEndscreen(who) {
     document.getElementById('overlay').classList.remove("d-none");
     document.getElementById('endScreen').classList.remove("d-none");
     document.getElementById('buttons').classList.add("d-none");
-    document.getElementById('mobilButtons').classList.add("d-none");
+    document.getElementById('mobilButtons').classList.remove("mobile-buttons");
     document.getElementById('winOrLose').innerHTML = '';
     document.getElementById('killedChicken').innerHTML = '';
 if (who instanceof Endboss) {
