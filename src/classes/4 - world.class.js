@@ -107,6 +107,10 @@ class World {
     }
   }
 
+  /**
+   * we define what shall happen if coin is collected and collision happend
+   * @param {*} item comes from collisionCollection() is coin
+   */
   whatToDoWithCoin(item) {
     item.collect_coin.currentTime = 0;
     item.collect_coin.volume = 0.5;
@@ -118,7 +122,10 @@ class World {
     this.character.collectedCoins++;
     this.coinbar.setPercentage(this.character.collectedCoins);
   }
-
+/**
+   * we define what shall happen if bottle is collected and collision happend
+   * @param {*} item comes from collisionCollection() is bottle
+   */
   whatToDoWithBottle(item) {
     item.collect_bottle.currentTime = 0;
     item.collect_bottle.volume = 0.5;
@@ -167,7 +174,12 @@ class World {
       }
     }
   }
-
+/**
+ * we check if character is walking left or right 
+ * and define in which direction bottle shall fly
+ * @param {*} x defines positionX of bottle appearence
+ * @param {*} y defines positionY of bottle appearance
+ */
   throwingLeftOrRight(x, y) {
     if (this.character.collectedBottles > 0) {
       this.throwableObjects.push(
@@ -197,7 +209,10 @@ class World {
       });
     });
   }
-
+/**
+ * checks if endboss was killed and counts killed endbosses
+ * @param {*} endboss coming from checkHitByBottle() and is specific endboss
+ */
   checkIfAlive(endboss) {
     if (endboss.energy <= 0 && !endboss.dead) {
       endboss.dead = true;
@@ -273,12 +288,23 @@ class World {
     });
   }
 
+
+  /**
+   * adds stuff to map
+   * @param {*} mo comes from movableObjects Class and is whatever movableObject, we wanna check 
+   * for instance chick, chicken or endboss
+   */
   addToMap(mo) {
     if (mo.otherDirection) this.flipImage(mo);
     mo.draw(this.ctx);
     if (mo.otherDirection) this.flipImageBack(mo);
   }
 
+/**
+ * flips images while objects walk
+ * @param {*} mo stands for whichever object moves
+ * for instance chicken, chisk, endboss
+ */
   flipImage(mo) {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
@@ -286,6 +312,11 @@ class World {
     mo.positionX = mo.positionX * -1;
   }
 
+/**
+ * flips images back while objects change direction
+ * @param {*} mo stands for whichever object moves
+ * for instance chicken, chisk, endboss
+ */
   flipImageBack(mo) {
     mo.positionX = mo.positionX * -1;
     this.ctx.restore();

@@ -43,9 +43,7 @@ class Chick extends MovableObject {
       if (currentTime - this.hetchTime >= 20000) {
         this.chick_shirping.pause();   
         this.chickenAdded = true;
-        world.level.enemies.push(
-          new Chicken(this.positionX, this.otherDirection)
-        );
+        world.level.enemies.push(new Chicken(this.positionX, this.otherDirection));
         this.removeInstance(world.level.lowEnemies);
       }
     }

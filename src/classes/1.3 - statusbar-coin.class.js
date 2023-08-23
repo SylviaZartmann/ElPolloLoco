@@ -22,6 +22,10 @@ class Coinbar extends DrawableObject {
     this.setPercentage(0);
   }
 
+  /**
+   * set the percentage and responds with suitable statusbar
+   * @param {*} collectedCoin defines amount of collected coins
+   */
   setPercentage(collectedCoin) {
     this.percentage = collectedCoin / this.maxCoins * 100;
     let imagePath = this.IMAGES_COIN[this.resolveImageIndex()];
@@ -30,7 +34,7 @@ class Coinbar extends DrawableObject {
 
     resolveImageIndex() {
       if (this.percentage == 100) {
-        return 5; //Bildindex, der ausgegeben wird
+        return 5; 
       } else if (this.percentage > 70) {
         return 4;
       } else if (this.percentage > 50) {

@@ -17,11 +17,15 @@ class Bottlebar extends DrawableObject  {
   percentage = 0;
 
   constructor() {
-    super().loadImage(this.IMAGES_BOTTLE[0]); //initialisierung der übergeordneten Objekte
+    super().loadImage(this.IMAGES_BOTTLE[0]);
     this.loadImages(this.IMAGES_BOTTLE);
     this.setPercentage(0);
   }
 
+  /**
+   * set the percentage and responds with suitable statusbar
+   * @param {*} collectedBottle defines amount of collected bottles
+   */
   setPercentage(collectedBottle) {
     this.percentage = collectedBottle / this.maxBottles * 100;   
     let imagePath = this.IMAGES_BOTTLE[this.resolveImageIndex()];

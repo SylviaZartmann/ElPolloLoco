@@ -101,6 +101,10 @@ canvas {
   justify-content: center;
   align-items: center;
 }
+.backwards:hover {
+  border: 1px solid #ef9822;
+  background-color: #a0220a;
+}
 
 .backwards img {
   z-index: 4;
@@ -109,8 +113,7 @@ canvas {
   filter: invert(14%) sepia(100%) saturate(2789%) hue-rotate(2deg)
     brightness(93%) contrast(93%);
 }
-
-.backwards img:hover {
+.backwards:hover img{
   filter: invert(74%) sepia(25%) saturate(4727%) hue-rotate(347deg) brightness(99%) contrast(89%);
 }
 

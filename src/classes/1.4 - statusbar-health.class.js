@@ -16,20 +16,24 @@ class Healthbar extends DrawableObject  {
 
 
   constructor() {
-    super().loadImage(this.IMAGES_HEALTH[5]); //initialisierung der übergeordneten Objekte
+    super().loadImage(this.IMAGES_HEALTH[5]);
     this.loadImages(this.IMAGES_HEALTH);
     this.setPercentage(100);
   }
 
+  /**
+   * set the percentage and responds with suitable statusbar
+   * @param {*} percentage defines hitpoints given by character being hit
+   */
   setPercentage(percentage) {
-    this.percentage = percentage; //aus dem Stapel Bilder muss Index zwischen 0 und 5 ermitteln
+    this.percentage = percentage;
     let imagePath = this.IMAGES_HEALTH[this.resolveImageIndex()];
     this.img = this.imageCache[imagePath];
   }
 
   resolveImageIndex() {
     if (this.percentage == 100) {
-      return 5; //Bildindex, der ausgegeben wird
+      return 5;
     } else if (this.percentage > 70) {
       return 4;
     } else if (this.percentage > 50) {

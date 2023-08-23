@@ -2,7 +2,7 @@ class MovableObject extends DrawableObject {
   speed;
   otherDirection = false;
   fallingSpeedY = 0;
-  acceleration = 2; // Beschleunigungswert
+  acceleration = 2;
   lastHit = 0;
   offsetLeft = 0;
   offsetTop = 0;
@@ -31,6 +31,15 @@ class MovableObject extends DrawableObject {
     }
   }
 
+  /**
+   * we define the hitbox X-coordinates based on the direction the objects are oriented
+   * first if character walks other direction than default and mo default
+   * second if the enemy walks other direction than default and character default
+   * third if both move different direction than default
+   * last if both oriented in default direction
+   * @param {*} mo it is the movableObject we wanna check
+   * for instance chick, chicken, endboss
+   */
   whichDirection(mo) {
     if (this.otherDirection) {
       this.hitboxX = this.positionX + this.offsetRight;
@@ -46,7 +55,11 @@ class MovableObject extends DrawableObject {
       mo.hitboxX = mo.positionX + mo.offsetLeft;
     }
   }
-
+/**
+   * we define the hitbox based on whichDirection(mo) outcome
+   * @param {*} mo it is the movableObject we wanna check
+   * for instance chick, chicken, endboss
+   */
   defineHitbox(mo) {
     this.hitboxY = this.positionY + this.offsetTop;
     this.hitboxWidth = this.width - (this.offsetLeft + this.offsetRight);
@@ -55,7 +68,11 @@ class MovableObject extends DrawableObject {
     mo.hitboxWidth = mo.width - (mo.offsetLeft + mo.offsetRight);
     mo.hitboxHeight = mo.height - mo.offsetBottom;
   }
-
+/**
+   * we check for collision of character and mo
+   * @param {*} mo it is the movableObject we wanna check
+   * for instance chick, chicken, endboss
+   */
   isColliding(mo) {
       return (
         this.hitboxX + this.hitboxWidth > mo.hitboxX &&
@@ -154,7 +171,10 @@ class MovableObject extends DrawableObject {
       return this.imageOfInterest = false;
     }
   }
-
+/**
+ * removes objects from world
+ * @param {*} whatToSplice defines from which Object or Array we want to remove an object
+ */
   removeInstance(whatToSplice) {
     let index = whatToSplice.indexOf(this);
     if (index !== -1) {

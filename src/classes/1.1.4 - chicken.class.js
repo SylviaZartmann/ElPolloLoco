@@ -27,7 +27,7 @@ class Chicken extends MovableObject {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.isPositionX(positionX);
     this.otherDirection = otherDirection;
-    this.loadImages(this.IMAGES_WALKING); //es werden alle Bilder des chicken in Bewegung in JSON geladen
+    this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_DEAD);
     this.speed = 0.25 + Math.random() * 1.25;
     this.animate();
@@ -46,16 +46,10 @@ class Chicken extends MovableObject {
     setInterval(() => {
       if (!this.otherDirection && !this.isDead()) {
         this.moveLeft();
-
-        if (this.positionX <= this.startPosition - this.movementRange) {
-          this.otherDirection = true;
-        }
+        if (this.positionX <= this.startPosition - this.movementRange) this.otherDirection = true;
       } else if (this.otherDirection && !this.isDead()) {
         this.moveRight();
-
-        if (this.positionX >= this.startPosition + this.movementRange) {
-          this.otherDirection = false;
-        }
+      if (this.positionX >= this.startPosition + this.movementRange) this.otherDirection = false;
       }
       if (this.isDead()) {
         this.Damage = 0;
@@ -69,9 +63,7 @@ class Chicken extends MovableObject {
 
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
-      if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
-      }
+      if (this.isDead()) this.playAnimation(this.IMAGES_DEAD);
     }, 250);
   }
 
