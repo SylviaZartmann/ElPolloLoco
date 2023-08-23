@@ -5,6 +5,7 @@ let canvasstarted = false;
 
 
 let StartEndscreen = new Audio("src/audio/start_end_screen.mp3");
+StartEndscreen.volume = 0.4;   
 
 window.addEventListener("keydown", (e) => {
   if (e.keyCode == 39) {
@@ -115,9 +116,32 @@ function playMusic() {
 function startGame2() {
   StartEndscreen.pause();
   document.getElementById('overlay').classList.add("d-none");
-  document.getElementById('controls').classList.add("d-none");
+  document.getElementById('instructions').classList.add("d-none");
   document.getElementById('mobilButtons').classList.remove("d-none");
   init();
+}
+
+function showInstructions() {
+  document.getElementById('instructions').classList.remove("d-none");
+  document.getElementById('buttons').classList.add("d-none");
+  document.getElementById('backwards').classList.remove("d-none");
+}
+
+function showControls() {
+  document.getElementById('controls').classList.remove("d-none");
+  document.getElementById('buttons').classList.add("d-none");
+  document.getElementById('backwards').classList.remove("d-none");
+  
+}
+
+function showOptions() {
+  playMusic();
+  document.getElementById('overlay').classList.remove("d-none");
+  document.getElementById('buttons').classList.remove("d-none");
+  document.getElementById('controls').classList.add("d-none");
+  document.getElementById('instructions').classList.add("d-none");
+  document.getElementById('startscreen').classList.add("d-none");
+  document.getElementById('backwards').classList.add("d-none");
 }
 
 function newGame() {
@@ -127,18 +151,12 @@ function newGame() {
   window.location.reload();
 }
 
-function showControls() {
-  playMusic();
-  document.getElementById('overlay').classList.remove("d-none");
-  document.getElementById('controls').classList.remove("d-none");
-  document.getElementById('startscreen').classList.add("d-none");
-}
-
 function showEndscreen(who) {
   playMusic();
     world.character.endboss_coming.pause();
     document.getElementById('overlay').classList.remove("d-none");
     document.getElementById('endScreen').classList.remove("d-none");
+    document.getElementById('buttons').classList.add("d-none");
     document.getElementById('mobilButtons').classList.add("d-none");
     document.getElementById('winOrLose').innerHTML = '';
     document.getElementById('killedChicken').innerHTML = '';

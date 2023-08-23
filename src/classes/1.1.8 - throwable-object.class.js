@@ -62,12 +62,14 @@ class ThrowableObject extends MovableObject {
 
   soundAndAnimation() {
     if (this.flying) {
+      this.rotating_sound.volume = 0.5;
       this.rotating_sound.play();
       this.playAnimation(this.ROTATING_BOTTLE);
     }
     if (!this.flying) {
       this.rotating_sound.pause();
       if (!this.splashed) {
+        this.spalshing_sound.volume = 0.5;
         this.spalshing_sound.play();
       this.splashed = true;
       }

@@ -78,6 +78,7 @@ class Chicken extends MovableObject {
   audioChickenDead() {
     if (!this.audioPlayed) {
       this.killed_chicken.currentTime = 0;
+      this.killed_chicken.volume = 0.5;
       this.killed_chicken.play();
       this.audioPlayed = true;
     } setTimeout(() => {

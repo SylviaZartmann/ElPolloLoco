@@ -3,6 +3,7 @@ class World {
   healthbar = new Healthbar();
   bottlebar = new Bottlebar();
   coinbar = new Coinbar();
+  endbossbar = new Endbossbar();
 
   level = level1;
   canvas;
@@ -108,6 +109,7 @@ class World {
 
   whatToDoWithCoin(item) {
     item.collect_coin.currentTime = 0;
+    item.collect_coin.volume = 0.5;
     item.collect_coin.play();
     setTimeout(() => {
       item.collect_coin.pause();
@@ -119,6 +121,7 @@ class World {
 
   whatToDoWithBottle(item) {
     item.collect_bottle.currentTime = 0;
+    item.collect_bottle.volume = 0.5;
     item.collect_bottle.play();
     setTimeout(() => {
       item.collect_bottle.pause();
@@ -186,9 +189,10 @@ class World {
         bottle.whichDirection(endboss);
         bottle.defineHitbox(endboss);
         bottle.checkDistance(endboss);
-        if (bottle.distance < -30 && bottle.hitboxY > endboss.hitboxY) {
+        if (bottle.distance < -15 && bottle.hitboxY > endboss.hitboxY) {
           bottle.flying = false;
           endboss.hit(bottle);
+          this.endbossbar.setPercentage(endboss.energy);
         }
       });
     });
@@ -239,6 +243,7 @@ class World {
     this.addBackgroundToMap(this.level.egg);
     this.addBackgroundToMap(this.level.coin);
     this.ctx.translate(-this.camera_X, 0);
+    this.drawLater();
     this.addToMap(this.healthbar);
     this.addToMap(this.bottlebar);
     this.addToMap(this.coinbar);
@@ -256,6 +261,12 @@ class World {
     });
   }
 
+  drawLater() {
+    if (this.character.killedChicken >= 10) {
+      this.addToMap(this.endbossbar);
+    }
+  }
+
   addBackgroundToMap(objects) {
     objects.forEach((obj) => {
       this.addToMap(obj);
@@ -263,15 +274,9 @@ class World {
   }
 
   addToMap(mo) {
-    if (mo.otherDirection) {
-      this.flipImage(mo);
-    }
-
+    if (mo.otherDirection) this.flipImage(mo);
     mo.draw(this.ctx);
-
-    if (mo.otherDirection) {
-      this.flipImageBack(mo);
-    }
+    if (mo.otherDirection) this.flipImageBack(mo);
   }
 
   flipImage(mo) {

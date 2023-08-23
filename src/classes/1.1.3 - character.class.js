@@ -131,6 +131,7 @@ class Character extends MovableObject {
       } else if (this.isHurt()) {
         this.walking_sound.pause();
         this.playAnimation(this.IMAGES_HURT);
+        this.hurt_sound.volume = 0.5; 
         this.hurt_sound.play();
       } else if (this.isAboveGround()) {
         this.walking_sound.pause();
